@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  username      String    @unique
+  passwordHash  String
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile       Profile?
+  videos        Video[]       @relation("UploadedVideos")
+  viewHistory   ViewHistory[]
+  likes         Like[]
+}
+
+model Profile {
+  id          String   @id @default(cuid())
+  displayName String?
+  avatarUrl   String?
+  bio         String?
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GameCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  videos      Video[]
+}
+
+model Video {
+  id           String        @id @default(cuid())
+  title        String
+  description  String?
+  url          String        // Cloudinary HLS URL/Public ID
+  thumbnailUrl String?
+  isPublic     Boolean       @default(true)
+  viewsCount   Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  uploaderId   String
+  uploader     User          @relation("UploadedVideos", fields: [uploaderId], references: [id])
+  
+  categoryId   String?
+  category     GameCategory? @relation(fields: [categoryId], references: [id])
+
+  viewHistory  ViewHistory[]
+  likes        Like[]
+}
+
+model ViewHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  videoId   String
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  watchedAt DateTime @default(now())
+
+  @@index([userId, videoId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  videoId   String
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, videoId])
+}
