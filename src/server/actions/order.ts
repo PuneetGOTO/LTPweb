@@ -88,17 +88,20 @@ export async function createOrder(formData: FormData) {
     }
   })
 
+  const clientName = (session.user as any).displayName || (session.user as any).username || session.user.name || "Unknown"
+  const companionName = companion.profile?.displayName || companion.username
+
   // Send to Discord
   await sendOrderToDiscord({
     id: order.id,
     gameName,
     platform: "DIRECT BOOKING",
     serverName: "N/A",
-    serviceType: `COMPANION → ${companion.username}`,
+    serviceType: `${clientName} → ${companionName}`,
     durationHours,
     totalPrice,
     wechatId,
-    username: (session.user as any).username || session.user.name || "Unknown"
+    username: clientName
   })
 
   return { success: true }
