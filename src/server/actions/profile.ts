@@ -35,7 +35,7 @@ export async function uploadAvatar(formData: FormData) {
       public_id: `avatar_${session.user.id}`,
       overwrite: true,
       eager: [
-        { width: 256, height: 256, crop: "fill", gravity: "face", quality: "auto", format: "auto" }
+        { width: 256, height: 256, crop: "fill", gravity: "face" }
       ]
     })
 
