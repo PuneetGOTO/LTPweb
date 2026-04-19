@@ -58,8 +58,10 @@ export async function createOrder(formData: FormData) {
   const companionId = formData.get("companionId") as string
   const durationHours = parseInt(formData.get("durationHours") as string) || 1
   const gameName = formData.get("gameName") as string || "General"
+  const wechatId = (formData.get("wechatId") as string)?.trim()
   
   if (!companionId) return { error: "Invalid companion." }
+  if (!wechatId) return { error: "WeChat ID is required." }
 
   const companion = await prisma.user.findUnique({
     where: { id: companionId, role: "COMPANION" },
@@ -71,15 +73,30 @@ export async function createOrder(formData: FormData) {
   const rate = companion.profile?.hourlyRate || 150
   const totalPrice = rate * durationHours
 
-  await prisma.order.create({
+  const order = await prisma.order.create({
     data: {
       clientId: session.user.id!,
       companionId,
       gameName,
       durationHours,
       totalPrice,
+      wechatId,
+      serviceType: "COMPANION",
       status: "PENDING"
     }
+  })
+
+  // Send to Discord
+  await sendOrderToDiscord({
+    id: order.id,
+    gameName,
+    platform: "DIRECT BOOKING",
+    serverName: "N/A",
+    serviceType: `COMPANION → ${companion.username}`,
+    durationHours,
+    totalPrice,
+    wechatId,
+    username: (session.user as any).username || session.user.name || "Unknown"
   })
 
   return { success: true }

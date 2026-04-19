@@ -3,20 +3,26 @@ import { useState } from "react"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Navbar } from "@/components/Navbar"
 import { createOrder } from "@/server/actions/order"
-import { Star, CheckCircle, Mic, ArrowLeft } from "lucide-react"
+import { Star, CheckCircle2, Mic, ArrowLeft, MessageCircle } from "lucide-react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 export default function CompanionClient({ companion }: { companion: any }) {
   const { t } = useLanguage()
   const profile = companion.profile || {}
   
   const [duration, setDuration] = useState(1)
+  const [wechatId, setWechatId] = useState("")
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
 
   const handleBooking = async (e: React.FormEvent<HTMLFormElement>) => {
      e.preventDefault()
+     if (!wechatId.trim()) {
+       setError(t('checkout.wechat.required'))
+       return
+     }
      setLoading(true)
      setError("")
      setSuccess(false)
@@ -25,6 +31,7 @@ export default function CompanionClient({ companion }: { companion: any }) {
      formData.append("companionId", companion.id)
      formData.append("durationHours", duration.toString())
      formData.append("gameName", profile.games?.split(",")[0] || "General")
+     formData.append("wechatId", wechatId.trim())
 
      try {
        const res = await createOrder(formData)
@@ -77,27 +84,64 @@ export default function CompanionClient({ companion }: { companion: any }) {
                    ))}
                  </div>
                  
-                 <form onSubmit={handleBooking} className="border-t border-white/10 pt-6">
-                   <h3 className="text-sm font-bold text-white mb-3 tracking-widest">{t('booking.modal.title')}</h3>
-                   
-                   <div className="flex justify-between items-center bg-black/50 border border-white/10 rounded p-1 mb-4">
-                     <button type="button" onClick={() => setDuration(Math.max(1, duration-1))} className="px-4 py-2 hover:bg-white/10 rounded text-muted-foreground transition">-</button>
-                     <span className="font-bold text-white">{duration} {t('booking.duration').split(" ")[0]}</span>
-                     <button type="button" onClick={() => setDuration(Math.min(24, duration+1))} className="px-4 py-2 hover:bg-white/10 rounded text-muted-foreground transition">+</button>
-                   </div>
-                   
-                   <div className="flex justify-between mb-6 text-sm">
-                     <span className="text-muted-foreground">{t('booking.total')}</span>
-                     <span className="font-bold text-white">${(profile.hourlyRate || 150) * duration}</span>
-                   </div>
-                   
-                   {error && <div className="mb-4 text-xs text-destructive text-center font-bold bg-destructive/10 p-2 rounded border border-destructive/20">{error}</div>}
-                   {success && <div className="mb-4 text-xs text-green-400 bg-green-400/10 p-2 rounded flex center gap-2 justify-center border border-green-400/20"><CheckCircle className="w-4 h-4"/> Order Status: PENDING CONFIRMATION</div>}
-                   
-                   <button type="submit" disabled={loading || success} className="w-full py-3 bg-accent text-white font-bold tracking-widest rounded transition-all hover:shadow-[0_0_20px_rgba(255,0,170,0.5)] active:scale-95 disabled:opacity-50">
-                     {success ? "REQUEST SENT" : loading ? "PROCESSING..." : t('companion.book')}
-                   </button>
-                 </form>
+                 {/* Success State */}
+                 {success ? (
+                   <motion.div 
+                     initial={{ opacity: 0, scale: 0.95 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     className="border-t border-white/10 pt-6 text-center"
+                   >
+                     <CheckCircle2 className="w-14 h-14 text-green-400 mx-auto mb-3" />
+                     <h3 className="text-lg font-black font-orbitron text-green-400 mb-2">{t('checkout.success.title')}</h3>
+                     <p className="text-muted-foreground text-sm mb-4">{t('checkout.success.desc')}</p>
+                     <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-4">
+                       <p className="text-yellow-400/90 text-xs font-bold flex items-center justify-center gap-1.5">
+                         <MessageCircle className="w-3 h-3" />
+                         {t('checkout.success.wechat.note')}
+                       </p>
+                     </div>
+                     <Link href="/dashboard" className="block w-full py-2 bg-white/10 text-white font-bold text-sm rounded hover:bg-white/20 transition-colors text-center">
+                       {t('checkout.success.dashboard')}
+                     </Link>
+                   </motion.div>
+                 ) : (
+                   <form onSubmit={handleBooking} className="border-t border-white/10 pt-6">
+                     <h3 className="text-sm font-bold text-white mb-3 tracking-widest">{t('booking.modal.title')}</h3>
+                     
+                     {/* WeChat ID */}
+                     <div className="mb-4">
+                       <label className="text-xs font-bold text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                         <MessageCircle className="w-3 h-3 text-green-500" /> {t('checkout.wechat.label')}
+                       </label>
+                       <input 
+                         type="text"
+                         value={wechatId}
+                         onChange={(e) => setWechatId(e.target.value)}
+                         placeholder={t('checkout.wechat.placeholder')}
+                         className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white text-sm outline-none focus:border-green-500 placeholder:text-white/20 placeholder:text-xs"
+                         required
+                       />
+                     </div>
+
+                     {/* Duration */}
+                     <div className="flex justify-between items-center bg-black/50 border border-white/10 rounded p-1 mb-4">
+                       <button type="button" onClick={() => setDuration(Math.max(1, duration-1))} className="px-4 py-2 hover:bg-white/10 rounded text-muted-foreground transition">-</button>
+                       <span className="font-bold text-white">{duration} {t('booking.duration').split(" ")[0]}</span>
+                       <button type="button" onClick={() => setDuration(Math.min(24, duration+1))} className="px-4 py-2 hover:bg-white/10 rounded text-muted-foreground transition">+</button>
+                     </div>
+                     
+                     <div className="flex justify-between mb-6 text-sm">
+                       <span className="text-muted-foreground">{t('booking.total')}</span>
+                       <span className="font-bold text-white">${(profile.hourlyRate || 150) * duration}</span>
+                     </div>
+                     
+                     {error && <div className="mb-4 text-xs text-destructive text-center font-bold bg-destructive/10 p-2 rounded border border-destructive/20">{error}</div>}
+                     
+                     <button type="submit" disabled={loading} className="w-full py-3 bg-accent text-white font-bold tracking-widest rounded transition-all hover:shadow-[0_0_20px_rgba(255,0,170,0.5)] active:scale-95 disabled:opacity-50">
+                       {loading ? t('checkout.processing') : t('companion.book')}
+                     </button>
+                   </form>
+                 )}
                </div>
              </div>
           </div>
