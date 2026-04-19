@@ -210,3 +210,23 @@ export async function adminDeleteOrder(id: string) {
   revalidatePath("/dashboard")
   return { success: true }
 }
+
+export async function cancelMyOrder(orderId: string) {
+  const session = await auth()
+  if (!session || !session.user) return { error: "Not authenticated" }
+
+  const order = await prisma.order.findUnique({ where: { id: orderId } })
+  if (!order) return { error: "Order not found" }
+  if (order.clientId !== session.user.id) return { error: "Unauthorized" }
+  if (order.status !== "PENDING") return { error: "Only pending orders can be cancelled" }
+
+  await prisma.order.update({
+    where: { id: orderId },
+    data: { status: "CANCELLED" }
+  })
+
+  const { revalidatePath } = await import("next/cache")
+  revalidatePath("/dashboard")
+  revalidatePath("/admin/orders")
+  return { success: true }
+}

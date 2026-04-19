@@ -2,8 +2,9 @@
 import { useState, useRef } from "react"
 import { Navbar } from "@/components/Navbar"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { MessageSquare, Camera, User as UserIcon, Loader2 } from "lucide-react"
+import { MessageSquare, Camera, User as UserIcon, Loader2, XCircle } from "lucide-react"
 import { uploadAvatar } from "@/server/actions/profile"
+import { cancelMyOrder } from "@/server/actions/order"
 import { useRouter } from "next/navigation"
 
 interface DashboardProps {
@@ -20,8 +21,23 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
   const [uploading, setUploading] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(avatarUrl)
   const [error, setError] = useState("")
+  const [cancelling, setCancelling] = useState<string | null>(null)
 
   const DISCORD_LINK = "https://discord.gg/a9vANGBEXh"
+
+  const handleCancel = async (orderId: string) => {
+    if (!confirm(t('dash.cancel.confirm'))) return
+    setCancelling(orderId)
+    try {
+      const res = await cancelMyOrder(orderId)
+      if (res?.error) setError(res.error)
+      else router.refresh()
+    } catch (e: any) {
+      setError(e.message)
+    } finally {
+      setCancelling(null)
+    }
+  }
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()
@@ -112,8 +128,8 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
              ) : (
                <div className="space-y-4">
                  {clientOrders.map(order => (
-                   <div key={order.id} className="bg-black/40 border border-white/5 p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-accent/30 transition-colors">
-                     <div className="absolute left-0 top-0 w-1 h-full bg-accent"></div>
+                   <div key={order.id} className={`bg-black/40 border border-white/5 p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-accent/30 transition-colors ${order.status === 'CANCELLED' ? 'opacity-50' : ''}`}>
+                     <div className={`absolute left-0 top-0 w-1 h-full ${order.status === 'CANCELLED' ? 'bg-red-500' : 'bg-accent'}`}></div>
                      <div className="flex justify-between items-center w-full">
                        <div>
                          <p className="font-bold text-lg mb-1 text-white">{order.companion?.username || "LTP Platform Service"}</p>
@@ -121,17 +137,35 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
                        </div>
                        <div className="text-right">
                          <p className="font-bold text-primary">${order.totalPrice}</p>
-                         <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold text-white/70 ${order.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-400'}`}>
-                           {order.status === 'PENDING' ? t('order.status.pending') : t('order.status.accepted')}
+                         <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${
+                           order.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 
+                           order.status === 'CANCELLED' ? 'bg-red-500/20 text-red-400' :
+                           order.status === 'COMPLETED' ? 'bg-blue-500/20 text-blue-400' :
+                           'bg-green-500/20 text-green-400'
+                         }`}>
+                           {order.status === 'PENDING' ? t('order.status.pending') : 
+                            order.status === 'CANCELLED' ? t('order.status.cancelled') :
+                            order.status === 'COMPLETED' ? t('order.status.completed') :
+                            t('order.status.accepted')}
                          </span>
                        </div>
                      </div>
 
                      {order.status === 'PENDING' && (
-                       <a href={DISCORD_LINK} target="_blank" className="mt-4 w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors">
-                         <MessageSquare className="w-4 h-4"/> 
-                         {t('discord.pay')}
-                       </a>
+                       <div className="mt-4 flex gap-2">
+                         <a href={DISCORD_LINK} target="_blank" className="flex-1 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors">
+                           <MessageSquare className="w-4 h-4"/> 
+                           {t('discord.pay')}
+                         </a>
+                         <button 
+                           onClick={() => handleCancel(order.id)}
+                           disabled={cancelling === order.id}
+                           className="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded text-sm font-bold hover:bg-red-500 hover:text-white transition-all disabled:opacity-50 flex items-center gap-1.5"
+                         >
+                           <XCircle className="w-4 h-4" />
+                           {cancelling === order.id ? '...' : t('dash.cancel.btn')}
+                         </button>
+                       </div>
                      )}
                    </div>
                  ))}
