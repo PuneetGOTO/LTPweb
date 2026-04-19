@@ -1,19 +1,107 @@
 "use client"
+import { useState, useRef } from "react"
 import { Navbar } from "@/components/Navbar"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { MessageSquare } from "lucide-react"
+import { MessageSquare, Camera, User as UserIcon, Loader2 } from "lucide-react"
+import { uploadAvatar } from "@/server/actions/profile"
+import { useRouter } from "next/navigation"
 
-export default function DashboardClient({ clientOrders, companionOrders }: { clientOrders: any[], companionOrders: any[] }) {
+interface DashboardProps {
+  clientOrders: any[]
+  companionOrders: any[]
+  username: string
+  avatarUrl: string | null
+}
+
+export default function DashboardClient({ clientOrders, companionOrders, username, avatarUrl }: DashboardProps) {
   const { t } = useLanguage()
+  const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(avatarUrl)
+  const [error, setError] = useState("")
 
-  // Replace with real discord link when available
   const DISCORD_LINK = "https://discord.gg/LTP-ESPORTS"
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Preview immediately
+    const reader = new FileReader()
+    reader.onload = (ev) => setPreviewUrl(ev.target?.result as string)
+    reader.readAsDataURL(file)
+
+    // Upload
+    setUploading(true)
+    setError("")
+    const formData = new FormData()
+    formData.append("avatar", file)
+
+    try {
+      const res = await uploadAvatar(formData)
+      if (res?.error) {
+        setError(res.error)
+        setPreviewUrl(avatarUrl) // Revert preview
+      } else if (res?.avatarUrl) {
+        setPreviewUrl(res.avatarUrl)
+        router.refresh()
+      }
+    } catch (err: any) {
+      setError(err.message)
+      setPreviewUrl(avatarUrl)
+    } finally {
+      setUploading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="max-w-6xl mx-auto p-4 md:p-8">
-        <h1 className="text-4xl font-bold font-orbitron text-primary mb-8 border-b border-white/10 pb-4">{t('dash.title')}</h1>
+        
+        {/* Profile Header */}
+        <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-6">
+          {/* Avatar */}
+          <div className="relative group">
+            <button 
+              onClick={handleAvatarClick}
+              className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary/50 shadow-[0_0_20px_rgba(0,245,255,0.3)] bg-white/5 flex items-center justify-center cursor-pointer group-hover:border-primary transition-all"
+            >
+              {previewUrl ? (
+                <img src={previewUrl} alt="avatar" className="w-full h-full object-cover" />
+              ) : (
+                <UserIcon className="w-10 h-10 text-white/30" />
+              )}
+              
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                {uploading ? (
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                ) : (
+                  <Camera className="w-6 h-6 text-white" />
+                )}
+              </div>
+            </button>
+            <input 
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
+          
+          <div className="flex-1">
+            <h1 className="text-3xl md:text-4xl font-bold font-orbitron text-primary">{t('dash.title')}</h1>
+            <p className="text-muted-foreground mt-1 font-bold">{t('dash.welcome')}, <span className="text-white">{username}</span></p>
+            {error && <p className="text-destructive text-sm mt-1 font-bold">{error}</p>}
+          </div>
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {/* My Bookings */}

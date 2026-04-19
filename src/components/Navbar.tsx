@@ -11,6 +11,22 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
   const { data: session, status } = useSession()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  const avatarUrl = (session?.user as any)?.avatarUrl
+  const username = (session?.user as any)?.username
+
+  const AvatarBadge = ({ size = "sm" }: { size?: "sm" | "lg" }) => {
+    const dims = size === "lg" ? "w-10 h-10" : "w-7 h-7"
+    return (
+      <div className={`${dims} rounded-full overflow-hidden border border-primary/50 bg-white/5 flex-shrink-0 flex items-center justify-center`}>
+        {avatarUrl ? (
+          <img src={avatarUrl} alt={username} className="w-full h-full object-cover" />
+        ) : (
+          <UserIcon className={`${size === "lg" ? "w-5 h-5" : "w-4 h-4"} text-white/40`} />
+        )}
+      </div>
+    )
+  }
+
   return (
     <nav className={`w-full px-4 md:px-8 py-4 md:py-6 flex justify-between items-center z-50 glass-header border-b border-white/5 bg-black/40 backdrop-blur-md ${overlay ? 'absolute top-0' : 'sticky top-0'}`}>
       <Link href="/" className="text-3xl font-orbitron font-black tracking-tighter text-primary drop-shadow-[0_0_15px_rgba(0,245,255,0.7)] z-50">
@@ -54,10 +70,10 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
             <button onClick={() => signOut({ callbackUrl: "/login" })} className="text-sm font-semibold text-muted-foreground hover:text-white transition-colors">
                {t('nav.logout')}
             </button>
-            <div className="px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/50 font-bold tracking-widest flex items-center gap-2">
-              <UserIcon className="w-4 h-4" />
-              {(session?.user as any)?.username}
-            </div>
+            <Link href="/dashboard" className="px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/50 font-bold tracking-widest flex items-center gap-2 hover:bg-primary/20 transition-colors">
+              <AvatarBadge />
+              {username}
+            </Link>
           </div>
         ) : (
           <Link href="/login" className="px-6 py-2 rounded-full bg-primary/10 text-primary border border-primary/50 hover:bg-primary hover:text-black transition-all font-bold tracking-widest shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:shadow-[0_0_25px_rgba(0,245,255,0.8)] flex items-center gap-2">
@@ -86,9 +102,15 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
           
           {session ? (
             <div className="flex flex-col items-center gap-6">
-              <div className="px-6 py-2 rounded-full bg-primary/10 text-primary border border-primary/50 font-bold tracking-widest flex items-center gap-2">
-                <UserIcon className="w-5 h-5" />
-                {(session?.user as any)?.username}
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary/50 bg-white/5 flex items-center justify-center">
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt={username} className="w-full h-full object-cover" />
+                  ) : (
+                    <UserIcon className="w-8 h-8 text-white/30" />
+                  )}
+                </div>
+                <span className="text-primary font-bold tracking-widest">{username}</span>
               </div>
               <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard" className="text-2xl font-bold hover:text-primary transition-colors">
                 {t('nav.dashboard')}

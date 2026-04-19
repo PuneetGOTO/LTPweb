@@ -18,22 +18,36 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.username || !credentials?.password) return null;
         
         const user = await prisma.user.findUnique({
-          where: { username: credentials.username as string }
+          where: { username: credentials.username as string },
+          include: { profile: true }
         });
 
         if (user && await bcrypt.compare(credentials.password as string, user.passwordHash)) {
-          return { id: user.id, username: user.username, role: user.role };
+          return { 
+            id: user.id, 
+            username: user.username, 
+            role: user.role,
+            avatarUrl: user.profile?.avatarUrl || null
+          };
         }
         return null; // 登入失敗
       }
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.role = (user as any).role;
         token.username = (user as any).username;
+        token.avatarUrl = (user as any).avatarUrl;
+      }
+      // Refresh avatar on session update
+      if (trigger === "update" && token.id) {
+        const profile = await prisma.profile.findUnique({
+          where: { userId: token.id as string }
+        });
+        token.avatarUrl = profile?.avatarUrl || null;
       }
       return token;
     },
@@ -42,6 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
         (session.user as any).role = token.role as string;
         (session.user as any).username = token.username as string;
+        (session.user as any).avatarUrl = token.avatarUrl as string | null;
       }
       return session;
     }

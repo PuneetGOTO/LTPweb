@@ -11,6 +11,11 @@ export default async function DashboardPage() {
   
   const userId = session.user.id!
   
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { profile: true }
+  })
+
   const clientOrders = await prisma.order.findMany({
     where: { clientId: userId },
     include: { companion: true },
@@ -23,5 +28,12 @@ export default async function DashboardPage() {
     orderBy: { createdAt: 'desc' }
   })
   
-  return <DashboardClient clientOrders={clientOrders} companionOrders={companionOrders} />
+  return (
+    <DashboardClient 
+      clientOrders={clientOrders} 
+      companionOrders={companionOrders}
+      username={(session.user as any).username}
+      avatarUrl={user?.profile?.avatarUrl || null}
+    />
+  )
 }
