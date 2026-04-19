@@ -85,8 +85,12 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                  <td className="p-4 text-sm font-semibold text-white">
                    <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex items-center justify-center text-white font-orbitron shadow-inner shrink-0">
-                        {user.username.charAt(0).toUpperCase()}
+                     <div className="w-8 h-8 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex flex-shrink-0 items-center justify-center text-white font-orbitron shadow-inner shrink-0 overflow-hidden">
+                        {user.profile?.avatarUrl ? (
+                          <img src={user.profile.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+                        ) : (
+                          user.username.charAt(0).toUpperCase()
+                        )}
                      </div>
                      <span className="truncate max-w-[150px]">{user.username}</span>
                    </div>

@@ -22,7 +22,8 @@ export default async function AdminDashboard() {
 
   const recentUsers = await prisma.user.findMany({
     take: 5,
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: { profile: { select: { avatarUrl: true } } }
   })
 
   const recentOrders = await prisma.order.findMany({

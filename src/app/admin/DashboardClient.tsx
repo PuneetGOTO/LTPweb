@@ -182,8 +182,12 @@ export default function DashboardClient({
           <div className="space-y-4">
             {recentUsers.map(user => (
               <div key={user.id} className="flex items-center gap-4 bg-white/5 border border-white/5 p-3 rounded-lg">
-                <div className="w-10 h-10 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex items-center justify-center text-white font-orbitron font-bold">
-                  {user.username.charAt(0).toUpperCase()}
+                <div className="w-10 h-10 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex items-center justify-center text-white font-orbitron font-bold overflow-hidden">
+                  {user.profile?.avatarUrl ? (
+                    <img src={user.profile.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+                  ) : (
+                    user.username.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-semibold text-white">{user.username}</div>
