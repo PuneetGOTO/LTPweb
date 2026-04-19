@@ -1,6 +1,9 @@
 "use client"
+import { useState } from "react"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { Users, Video as VideoIcon, Eye, Clock, UserPlus, Cloud, CloudOff } from "lucide-react"
+import { Users, Video as VideoIcon, Eye, Clock, UserPlus, Cloud, CloudOff, Settings } from "lucide-react"
+import { updateCloudinaryConfig } from "@/server/actions/settings"
+import { useRouter } from "next/navigation"
 
 export default function DashboardClient({ 
   usersCount, 
@@ -18,6 +21,37 @@ export default function DashboardClient({
   cloudinaryConnected?: boolean
 }) {
   const { t } = useLanguage()
+  const router = useRouter()
+  
+  const [showCloudinaryModal, setShowCloudinaryModal] = useState(false)
+  const [cName, setCName] = useState("")
+  const [cKey, setCKey] = useState("")
+  const [cSecret, setCSecret] = useState("")
+  const [cLoading, setCLoading] = useState(false)
+  const [cError, setCError] = useState("")
+
+  const handleCloudinarySave = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setCLoading(true)
+    setCError("")
+    const formData = new FormData()
+    formData.append("cloudName", cName.trim())
+    formData.append("apiKey", cKey.trim())
+    formData.append("apiSecret", cSecret.trim())
+
+    try {
+      const res = await updateCloudinaryConfig(formData)
+      if (res.error) setCError(res.error)
+      else {
+        setShowCloudinaryModal(false)
+        router.refresh() // re-fetch connection status
+      }
+    } catch (err: any) {
+      setCError(err.message)
+    } finally {
+      setCLoading(false)
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -37,8 +71,57 @@ export default function DashboardClient({
               Cloudinary: Disconnected / Error
             </div>
           )}
+          <button 
+            onClick={() => setShowCloudinaryModal(true)}
+            className="p-1 text-muted-foreground hover:text-white transition-colors"
+            title="Configure Cloudinary"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
         </div>
       </div>
+
+      {showCloudinaryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-white/10 rounded-xl p-6 w-full max-w-md shadow-2xl relative">
+            <h2 className="text-xl font-bold font-orbitron text-white mb-4">Cloudinary Config</h2>
+            <p className="text-sm text-muted-foreground mb-6">Enter your Cloudinary API credentials. These will be saved to your server's .env file and applied immediately.</p>
+            
+            <form onSubmit={handleCloudinarySave} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">CLOUD NAME</label>
+                <input 
+                  type="text" required value={cName} onChange={e => setCName(e.target.value)}
+                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">API KEY</label>
+                <input 
+                  type="text" required value={cKey} onChange={e => setCKey(e.target.value)}
+                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted-foreground mb-1 block">API SECRET</label>
+                <input 
+                  type="password" required value={cSecret} onChange={e => setCSecret(e.target.value)}
+                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                />
+              </div>
+              
+              {cError && <p className="text-xs text-destructive font-bold">{cError}</p>}
+              
+              <div className="flex justify-end gap-3 pt-4">
+                <button type="button" onClick={() => setShowCloudinaryModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-white">Cancel</button>
+                <button type="submit" disabled={cLoading} className="px-4 py-2 text-sm font-bold bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50">
+                  {cLoading ? "Saving..." : "Save & Test"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-black to-slate-900 border border-white/10 rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(0,245,255,0.1)]">
