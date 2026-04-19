@@ -157,7 +157,7 @@ export async function createBlindOrder(formData: FormData) {
 
 export async function adminAcceptOrder(id: string) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.order.update({
     where: { id },
@@ -172,7 +172,7 @@ export async function adminAcceptOrder(id: string) {
 
 export async function adminCompleteOrder(id: string) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.order.update({
     where: { id },
@@ -187,7 +187,7 @@ export async function adminCompleteOrder(id: string) {
 
 export async function adminCancelOrder(id: string) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.order.update({
     where: { id },
@@ -202,7 +202,7 @@ export async function adminCancelOrder(id: string) {
 
 export async function adminDeleteOrder(id: string) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.order.delete({
     where: { id }

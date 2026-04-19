@@ -7,7 +7,7 @@ import cloudinary from "@/lib/cloudinary"
 
 export async function updateCloudinaryConfig(formData: FormData) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") {
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) {
     return { error: "Unauthorized" }
   }
 

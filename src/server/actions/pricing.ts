@@ -32,7 +32,7 @@ export async function getServicePrice(platform: string, server: string | null, s
 
 export async function updateServicePrice(id: string, hourlyRate: number, isActive?: boolean) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   const data: any = { hourlyRate }
   if (typeof isActive === "boolean") {
@@ -49,7 +49,7 @@ export async function updateServicePrice(id: string, hourlyRate: number, isActiv
 
 export async function toggleServiceActive(id: string, isActive: boolean) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.servicePricing.update({
     where: { id },
@@ -71,7 +71,7 @@ export async function getAllServicePricing() {
 
 export async function seedServicePricing() {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   const combos = [
     { platform: "MOBILE", server: "NONE", serviceType: "COMPANION" },

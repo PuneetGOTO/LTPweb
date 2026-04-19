@@ -7,13 +7,15 @@ import bcrypt from "bcryptjs"
 
 async function verifyAdmin() {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") {
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) {
     throw new Error("Unauthorized access. Admin privileges required.")
   }
+  return session
 }
 
 export async function adminCreateUser(formData: FormData) {
-  await verifyAdmin()
+  const session = await verifyAdmin()
+  const isSuper = (session.user as any).role === "SUPER_ADMIN"
   
   const username = formData.get("username") as string
   const password = formData.get("password") as string
@@ -28,11 +30,16 @@ export async function adminCreateUser(formData: FormData) {
 
   const passwordHash = await bcrypt.hash(password, 10)
 
+  let finalRole = role && Object.values(["USER", "COMPANION", "ADMIN", "SUPER_ADMIN"]).includes(role) ? role : "USER"
+  if (["ADMIN", "SUPER_ADMIN"].includes(finalRole) && !isSuper) {
+    return { error: "Only Super Admins can assign Admin privileges." }
+  }
+
   const createdTarget = await prisma.user.create({
     data: {
       username,
       passwordHash,
-      role: role && Object.values(["USER", "COMPANION", "ADMIN"]).includes(role) ? role : "USER",
+      role: finalRole,
     }
   })
 
@@ -54,7 +61,8 @@ export async function adminCreateUser(formData: FormData) {
 }
 
 export async function adminUpdateUser(formData: FormData) {
-  await verifyAdmin()
+  const session = await verifyAdmin()
+  const isSuper = (session.user as any).role === "SUPER_ADMIN"
 
   const id = formData.get("id") as string
   const role = formData.get("role") as any
@@ -63,8 +71,21 @@ export async function adminUpdateUser(formData: FormData) {
 
   if (!id) return { error: "User ID required" }
 
+  const targetUser = await prisma.user.findUnique({ where: { id } })
+  if (!targetUser) return { error: "User not found" }
+  
+  // Preventing normal admins from modifying other admins (unless themselves if they just want to edit profile)
+  if (["ADMIN", "SUPER_ADMIN"].includes(targetUser.role) && !isSuper && targetUser.id !== session.user!.id) {
+    return { error: "Only Super Admins can modify other Admin accounts." }
+  }
+
   let dataToUpdate: any = {}
-  if (role) dataToUpdate.role = role
+  if (role) {
+     if (["ADMIN", "SUPER_ADMIN"].includes(role) && !isSuper && targetUser.role !== role) {
+       return { error: "Only Super Admins can grant Admin privileges." }
+     }
+     dataToUpdate.role = role
+  }
   if (password) {
     if (password.length < 6) return { error: "Password must be at least 6 characters" }
     dataToUpdate.passwordHash = await bcrypt.hash(password, 10)
@@ -111,7 +132,14 @@ export async function adminUpdateUser(formData: FormData) {
 }
 
 export async function adminDeleteUser(id: string) {
-  await verifyAdmin()
+  const session = await verifyAdmin()
+  const isSuper = (session.user as any).role === "SUPER_ADMIN"
+
+  const targetUser = await prisma.user.findUnique({ where: { id } })
+  if (!targetUser) return { error: "User not found" }
+  if (["ADMIN", "SUPER_ADMIN"].includes(targetUser.role) && !isSuper) {
+    return { error: "Only Super Admins can delete Admin accounts." }
+  }
 
   try {
     // Delete cascading should handle Profile, Videos, Orders automatically per schema

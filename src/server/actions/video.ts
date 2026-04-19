@@ -7,7 +7,7 @@ import cloudinary from "@/lib/cloudinary"
 
 export async function createVideo(formData: FormData) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   const title = formData.get("title") as string
   const description = formData.get("description") as string
@@ -62,7 +62,7 @@ export async function createVideo(formData: FormData) {
 
 export async function deleteVideo(id: string) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   await prisma.video.delete({ where: { id } })
   
@@ -73,7 +73,7 @@ export async function deleteVideo(id: string) {
 
 export async function updateVideo(formData: FormData) {
   const session = await auth()
-  if (!session || !session.user || (session.user as any).role !== "ADMIN") return { error: "Unauthorized" }
+  if (!session || !session.user || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) return { error: "Unauthorized" }
 
   const id = formData.get("id") as string
   const title = formData.get("title") as string

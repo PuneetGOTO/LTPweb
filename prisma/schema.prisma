@@ -10,6 +10,7 @@ enum Role {
   USER
   COMPANION
   ADMIN
+  SUPER_ADMIN
 }
 
 enum OrderStatus {

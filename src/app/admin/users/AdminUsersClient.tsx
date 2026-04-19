@@ -148,6 +148,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                     <option value="USER" className="text-black">USER</option>
                     <option value="COMPANION" className="text-black">COMPANION</option>
                     <option value="ADMIN" className="text-black">ADMIN</option>
+                    <option value="SUPER_ADMIN" className="text-black">SUPER_ADMIN</option>
                   </select>
                </div>
                <button type="submit" disabled={loading} className="w-full mt-4 bg-primary text-black font-bold py-2 rounded tracking-widest">{loading ? "SAVING..." : "CREATE"}</button>
@@ -179,6 +180,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                     <option value="USER" className="text-black">USER</option>
                     <option value="COMPANION" className="text-black">COMPANION</option>
                     <option value="ADMIN" className="text-black">ADMIN</option>
+                    <option value="SUPER_ADMIN" className="text-black">SUPER_ADMIN</option>
                   </select>
                </div>
                <div className="border-t border-white/10 pt-4 mt-4 space-y-4">
