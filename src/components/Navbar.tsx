@@ -62,7 +62,7 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
             <Link href="/dashboard" className="text-sm font-bold text-white hover:text-primary transition-colors">
                {t('nav.dashboard')}
             </Link>
-            {(session?.user as any)?.role === 'ADMIN' && (
+            {['ADMIN', 'SUPER_ADMIN'].includes((session?.user as any)?.role) && (
                <Link href="/admin" className="text-sm font-bold text-accent hover:text-accent/80 transition-colors">
                  {t('nav.admin')}
                </Link>
@@ -115,7 +115,7 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
               <Link onClick={() => setMobileMenuOpen(false)} href="/dashboard" className="text-2xl font-bold hover:text-primary transition-colors">
                 {t('nav.dashboard')}
               </Link>
-              {(session?.user as any)?.role === 'ADMIN' && (
+              {['ADMIN', 'SUPER_ADMIN'].includes((session?.user as any)?.role) && (
                 <Link onClick={() => setMobileMenuOpen(false)} href="/admin" className="text-2xl font-bold text-accent">
                   {t('nav.admin')}
                 </Link>

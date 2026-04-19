@@ -8,7 +8,7 @@ import AdminNavClient from "./AdminNavClient"
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
   
-  if (!session || (session.user as any).role !== "ADMIN") {
+  if (!session || !["ADMIN", "SUPER_ADMIN"].includes((session.user as any).role)) {
     redirect("/login")
   }
 
