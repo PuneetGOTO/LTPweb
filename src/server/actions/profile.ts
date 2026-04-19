@@ -34,13 +34,13 @@ export async function uploadAvatar(formData: FormData) {
       folder: "ltp-avatars",
       public_id: `avatar_${session.user.id}`,
       overwrite: true,
-      transformation: [
-        { width: 256, height: 256, crop: "fill", gravity: "face" },
-        { quality: "auto", fetch_format: "auto" }
+      eager: [
+        { width: 256, height: 256, crop: "fill", gravity: "face", quality: "auto", format: "auto" }
       ]
     })
 
-    const avatarUrl = result.secure_url
+    // Use the eager-transformed URL if available, otherwise use the original
+    const avatarUrl = result.eager?.[0]?.secure_url || result.secure_url
 
     // Upsert profile with new avatar
     const existingProfile = await prisma.profile.findUnique({
@@ -65,8 +65,8 @@ export async function uploadAvatar(formData: FormData) {
     revalidatePath("/companions")
     return { success: true, avatarUrl }
   } catch (e: any) {
-    console.error("Avatar upload failed:", e)
-    return { error: "Upload failed. Please try again." }
+    console.error("Avatar upload failed:", e?.message || e)
+    return { error: e?.message || "Upload failed. Please try again." }
   }
 }
 
