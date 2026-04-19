@@ -44,13 +44,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.avatarUrl = (user as any).avatarUrl;
         token.displayName = (user as any).displayName;
       }
-      // Refresh avatar on session update
-      if (trigger === "update" && token.id) {
-        const profile = await prisma.profile.findUnique({
-          where: { userId: token.id as string }
+      // To ensure role and profile are not stale (like when an admin changes a user's role)
+      // We will do a quick lookup if token.id exists. Next.js caches this DB query nicely.
+      if (token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          include: { profile: true }
         });
-        token.avatarUrl = profile?.avatarUrl || null;
-        token.displayName = profile?.displayName || null;
+        if (dbUser) {
+          token.role = dbUser.role;
+          token.avatarUrl = dbUser.profile?.avatarUrl || null;
+          token.displayName = dbUser.profile?.displayName || null;
+        }
       }
       return token;
     },

@@ -19,10 +19,15 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget)
     try {
       const res = await loginUser(formData)
-      if (res?.error) setError(res.error)
+      if (res?.error) {
+        setError(res.error)
+        setLoading(false)
+      } else if (res?.success) {
+        // Hard refresh to ensure layout and auth boundaries reset properly
+        window.location.href = "/video-hub"
+      }
     } catch (err) {
-      // NEXT_REDIRECT is handled automatically.
-    } finally {
+      // For any uncaught next-auth errors that shouldn't happen with redirect: false
       setLoading(false)
     }
   }

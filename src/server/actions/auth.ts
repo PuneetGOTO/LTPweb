@@ -56,9 +56,9 @@ export async function loginUser(formData: FormData) {
     await signIn("credentials", {
       username,
       password,
-      redirect: true,
-      redirectTo: "/video-hub", // Always redirect to hub after login
+      redirect: false,
     });
+    return { success: true };
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
