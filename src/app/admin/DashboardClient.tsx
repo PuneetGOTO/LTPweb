@@ -1,27 +1,44 @@
 "use client"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { Users, Video as VideoIcon, Eye, Clock, UserPlus } from "lucide-react"
+import { Users, Video as VideoIcon, Eye, Clock, UserPlus, Cloud, CloudOff } from "lucide-react"
 
 export default function DashboardClient({ 
   usersCount, 
   videosCount, 
   viewsCount,
   recentUsers,
-  recentOrders
+  recentOrders,
+  cloudinaryConnected
 }: { 
   usersCount: number, 
   videosCount: number, 
   viewsCount: number,
   recentUsers: any[],
-  recentOrders: any[]
+  recentOrders: any[],
+  cloudinaryConnected?: boolean
 }) {
   const { t } = useLanguage()
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold font-orbitron mb-8 border-b border-white/10 pb-4 text-primary">
-        {t('admin.nav.dashboard')}
-      </h1>
+      <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-8">
+        <h1 className="text-3xl font-bold font-orbitron text-primary">
+          {t('admin.nav.dashboard')}
+        </h1>
+        <div className="flex items-center gap-2">
+          {cloudinaryConnected === true ? (
+            <div className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-bold rounded-full flex items-center gap-1.5 border border-green-500/30">
+              <Cloud className="w-3.5 h-3.5" />
+              Cloudinary: Connected
+            </div>
+          ) : (
+            <div className="px-3 py-1 bg-destructive/20 text-destructive text-xs font-bold rounded-full flex items-center gap-1.5 border border-destructive/30">
+              <CloudOff className="w-3.5 h-3.5" />
+              Cloudinary: Disconnected / Error
+            </div>
+          )}
+        </div>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-black to-slate-900 border border-white/10 rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(0,245,255,0.1)]">
