@@ -132,7 +132,7 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
                      <div className={`absolute left-0 top-0 w-1 h-full ${order.status === 'CANCELLED' ? 'bg-red-500' : 'bg-accent'}`}></div>
                      <div className="flex justify-between items-center w-full">
                        <div>
-                         <p className="font-bold text-lg mb-1 text-white">{order.companion?.username || "LTP Platform Service"}</p>
+                         <p className="font-bold text-lg mb-1 text-white">{order.companion?.profile?.displayName || order.companion?.username || "LTP Platform Service"}</p>
                          <p className="text-xs text-muted-foreground">{order.gameName} • {order.durationHours} hr(s)</p>
                        </div>
                        <div className="text-right">
@@ -188,7 +188,7 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
                      <div className="absolute left-0 top-0 w-1 h-full bg-primary"></div>
                      <div className="flex justify-between items-center w-full">
                        <div>
-                         <p className="font-bold text-lg mb-1 text-white">{order.client.username}</p>
+                         <p className="font-bold text-lg mb-1 text-white">{order.client.profile?.displayName || order.client.username}</p>
                          <p className="text-xs text-muted-foreground">{order.gameName} • {order.durationHours} hr(s)</p>
                        </div>
                        <div className="text-right">

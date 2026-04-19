@@ -1,12 +1,18 @@
 "use client"
-
+import { useState } from "react"
 import { Navbar } from "@/components/Navbar"
 import Link from "next/link"
-import { Users, Star } from "lucide-react"
+import { Users, Star, Monitor, Smartphone } from "lucide-react"
 import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function CompanionsClient({ companions }: { companions: any[] }) {
   const { t } = useLanguage()
+  const [activeTab, setActiveTab] = useState<"PC" | "MOBILE">("PC")
+
+  const filteredCompanions = companions.filter(c => {
+    const plats = c.profile?.platforms || "PC"
+    return plats.includes(activeTab)
+  })
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -15,23 +21,39 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
         <h1 className="text-3xl md:text-4xl font-black font-orbitron text-accent drop-shadow-[0_0_10px_rgba(255,0,170,0.4)] mb-2">
           {t('comp.list.title')}
         </h1>
-        <p className="text-sm md:text-base text-muted-foreground mb-12">{t('comp.list.sub')}</p>
+        <p className="text-sm md:text-base text-muted-foreground mb-8">{t('comp.list.sub')}</p>
 
-        {companions.length === 0 ? (
+        {/* Platform Tabs */}
+        <div className="flex gap-4 mb-8 justify-center md:justify-start border-b border-white/10 pb-4">
+          <button 
+            onClick={() => setActiveTab("PC")}
+            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "PC" ? "border-accent text-accent bg-accent/10" : "border-transparent text-muted-foreground hover:text-white hover:bg-white/5"}`}
+          >
+            <Monitor className="w-5 h-5" /> PC Gaming (端游)
+          </button>
+          <button 
+            onClick={() => setActiveTab("MOBILE")}
+            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "MOBILE" ? "border-primary text-primary bg-primary/10" : "border-transparent text-muted-foreground hover:text-white hover:bg-white/5"}`}
+          >
+            <Smartphone className="w-5 h-5" /> Mobile Gaming (手游)
+          </button>
+        </div>
+
+        {filteredCompanions.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-24 bg-white/5 rounded-2xl border border-white/10">
             <p className="text-xl text-muted-foreground font-semibold">{t('home.empty')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
-            {companions.map(companion => (
+            {filteredCompanions.map(companion => (
               <Link href={`/companion/${companion.id}`} key={companion.id} className="group relative flex flex-col bg-black/40 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:border-accent/50 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(255,0,170,0.15)]">
                 <div className="aspect-square bg-white/5 relative overflow-hidden">
                   {companion.profile?.avatarUrl ? (
-                     <img src={companion.profile.avatarUrl} alt={companion.username} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                     <img src={companion.profile.avatarUrl} alt={companion.profile?.displayName || companion.username} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center text-white/20 bg-gradient-to-br from-black to-slate-900 shadow-inner">
                        <Users className="w-12 h-12 text-muted-foreground mb-2" />
-                       <span className="font-orbitron tracking-widest text-lg font-bold">{companion.username}</span>
+                       <span className="font-orbitron tracking-widest text-lg font-bold">{companion.profile?.displayName || companion.username}</span>
                      </div>
                   )}
                   <div className="absolute top-2 right-2 bg-black/80 backdrop-blur border border-white/10 rounded px-2 py-1 flex items-center gap-1 z-10">
@@ -55,7 +77,7 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
                 </div>
                 <div className="p-5 flex flex-col h-full bg-gradient-to-t from-black via-black/80 to-transparent">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-xl leading-tight truncate font-orbitron text-white">{companion.username}</h3>
+                    <h3 className="font-bold text-xl leading-tight truncate font-orbitron text-white">{companion.profile?.displayName || companion.username}</h3>
                     <span className="font-bold text-primary shrink-0">${companion.profile?.hourlyRate || 150}</span>
                   </div>
                   <div className="flex gap-2 mb-4 flex-wrap">

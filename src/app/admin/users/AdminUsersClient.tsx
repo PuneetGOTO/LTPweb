@@ -87,12 +87,15 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                    <div className="flex items-center gap-3">
                      <div className="w-8 h-8 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex flex-shrink-0 items-center justify-center text-white font-orbitron shadow-inner shrink-0 overflow-hidden">
                         {user.profile?.avatarUrl ? (
-                          <img src={user.profile.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+                          <img src={user.profile.avatarUrl} alt={user.profile?.displayName || user.username} className="w-full h-full object-cover" />
                         ) : (
-                          user.username.charAt(0).toUpperCase()
+                          (user.profile?.displayName || user.username).charAt(0).toUpperCase()
                         )}
                      </div>
-                     <span className="truncate max-w-[150px]">{user.username}</span>
+                     <div className="flex flex-col">
+                       <span className="truncate max-w-[150px]">{user.profile?.displayName || user.username}</span>
+                       {user.profile?.displayName && <span className="text-[10px] text-muted-foreground truncate max-w-[150px]">@{user.username}</span>}
+                     </div>
                    </div>
                  </td>
                  <td className="p-4">
@@ -163,6 +166,10 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                <input type="hidden" name="id" value={editingUser.id} />
                {error && <div className="p-2 bg-destructive/20 text-destructive text-sm rounded">{error}</div>}
                <div>
+                  <label className="text-xs text-muted-foreground">DISPLAY NAME</label>
+                  <input name="displayName" type="text" defaultValue={editingUser.profile?.displayName || ''} placeholder="Public nickname" className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+               </div>
+               <div>
                   <label className="text-xs text-muted-foreground">NEW {t('admin.user.password')} (OPTIONAL)</label>
                   <input name="password" type="password" placeholder="Leave empty to keep current" className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
                </div>
@@ -174,10 +181,19 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                     <option value="ADMIN" className="text-black">ADMIN</option>
                   </select>
                </div>
-               <div className="border-t border-white/10 pt-4 mt-4">
-                  <label className="text-xs text-accent font-bold">{t('admin.user.rate')}</label>
-                  <p className="text-[10px] text-muted-foreground mb-1">Set rate. Requires COMPANION role to apply front-end effect.</p>
-                  <input name="hourlyRate" type="number" defaultValue={editingUser.profile?.hourlyRate || 150} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+               <div className="border-t border-white/10 pt-4 mt-4 space-y-4">
+                  <div>
+                    <label className="text-xs text-accent font-bold">COMPANION PLATFORM</label>
+                    <select name="platforms" defaultValue={editingUser.profile?.platforms || 'PC'} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent">
+                      <option value="PC" className="text-black">PC Gaming (端游)</option>
+                      <option value="MOBILE" className="text-black">Mobile Gaming (手游)</option>
+                      <option value="PC,MOBILE" className="text-black">Both (端游 & 手游)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-accent font-bold">{t('admin.user.rate')}</label>
+                    <input name="hourlyRate" type="number" defaultValue={editingUser.profile?.hourlyRate || 150} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+                  </div>
                </div>
                
                <button type="submit" disabled={loading} className="w-full mt-4 bg-accent text-white font-bold py-2 rounded tracking-widest shadow-[0_0_15px_rgba(255,0,170,0.4)]">{loading ? "SAVING..." : t('admin.user.update')}</button>

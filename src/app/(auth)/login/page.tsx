@@ -42,7 +42,7 @@ export default function LoginPage() {
         {error && <div className="p-3 rounded bg-destructive/20 border border-destructive text-destructive text-sm text-center">{error}</div>}
         
         <div className="space-y-1">
-          <label className="text-xs font-bold text-muted-foreground ml-1">USERNAME</label>
+          <label className="text-xs font-bold text-muted-foreground ml-1">ACCOUNT ID (English/Numbers)</label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input 

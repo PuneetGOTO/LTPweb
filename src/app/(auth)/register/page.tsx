@@ -56,7 +56,7 @@ export default function RegisterPage() {
         {error && <div className="p-3 rounded bg-destructive/20 border border-destructive text-destructive text-sm text-center">{error}</div>}
         
         <div className="space-y-1">
-          <label className="text-xs font-bold text-muted-foreground ml-1">USERNAME</label>
+          <label className="text-xs font-bold text-muted-foreground ml-1">ACCOUNT ID (English/Numbers)</label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input 
@@ -64,8 +64,23 @@ export default function RegisterPage() {
               type="text" 
               required
               minLength={3}
+              pattern="^[A-Za-z0-9_]+$"
+              title="Only English letters, numbers, and underscores are allowed"
               className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
-              placeholder="Select a username"
+              placeholder="e.g. shadow_player"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-bold text-muted-foreground ml-1">DISPLAY NAME (Optional)</label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <input 
+              name="displayName" 
+              type="text" 
+              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              placeholder="Your public nickname"
             />
           </div>
         </div>

@@ -49,6 +49,7 @@ model Profile {
   voiceUrl    String?
   isOnline    Boolean  @default(false)
   games       String   @default("Valorant") // Example: "Valorant,Apex Legends"
+  platforms   String   @default("PC")       // Example: "PC", "MOBILE", or "PC,MOBILE"
   rating      Float    @default(5.0)
   totalOrders Int      @default(0)
 

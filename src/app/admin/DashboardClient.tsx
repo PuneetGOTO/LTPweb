@@ -184,13 +184,16 @@ export default function DashboardClient({
               <div key={user.id} className="flex items-center gap-4 bg-white/5 border border-white/5 p-3 rounded-lg">
                 <div className="w-10 h-10 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex items-center justify-center text-white font-orbitron font-bold overflow-hidden">
                   {user.profile?.avatarUrl ? (
-                    <img src={user.profile.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+                    <img src={user.profile.avatarUrl} alt={user.profile?.displayName || user.username} className="w-full h-full object-cover" />
                   ) : (
-                    user.username.charAt(0).toUpperCase()
+                    (user.profile?.displayName || user.username).charAt(0).toUpperCase()
                   )}
                 </div>
                 <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">{user.username}</div>
+                  <div className="text-sm font-semibold text-white">
+                    {user.profile?.displayName || user.username}
+                    {user.profile?.displayName && <span className="ml-2 text-[10px] text-muted-foreground">@{user.username}</span>}
+                  </div>
                   <div className="text-xs text-muted-foreground mt-1">{new Date(user.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div>

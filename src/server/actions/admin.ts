@@ -75,17 +75,32 @@ export async function adminUpdateUser(formData: FormData) {
     data: dataToUpdate
   })
 
-  // Update profile for companions if hourlyRate provided
-  if (!isNaN(hourlyRate)) {
-    const profile = await prisma.profile.findUnique({ where: { userId: id } })
+  const displayName = formData.get("displayName") as string
+  const platforms = formData.get("platforms") as string
+
+  // Update profile
+  const profile = await prisma.profile.findUnique({ where: { userId: id } })
+  const profileData: any = {}
+  
+  if (!isNaN(hourlyRate)) profileData.hourlyRate = hourlyRate
+  if (displayName) profileData.displayName = displayName
+  if (platforms) profileData.platforms = platforms
+  
+  if (Object.keys(profileData).length > 0) {
     if (profile) {
       await prisma.profile.update({
         where: { userId: id },
-        data: { hourlyRate }
+        data: profileData
       })
     } else {
       await prisma.profile.create({
-         data: { userId: id, hourlyRate, isOnline: true }
+         data: { 
+           userId: id, 
+           hourlyRate: isNaN(hourlyRate) ? 150 : hourlyRate, 
+           isOnline: true,
+           displayName,
+           platforms: platforms || "PC"
+         }
       })
     }
   }

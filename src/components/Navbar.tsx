@@ -19,7 +19,7 @@ export function Navbar({ overlay = false }: { overlay?: boolean }) {
     return (
       <div className={`${dims} rounded-full overflow-hidden border border-primary/50 bg-white/5 flex-shrink-0 flex items-center justify-center`}>
         {avatarUrl ? (
-          <img src={avatarUrl} alt={username} className="w-full h-full object-cover" />
+          <img src={avatarUrl} alt={(session?.user as any)?.displayName || username} className="w-full h-full object-cover" />
         ) : (
           <UserIcon className={`${size === "lg" ? "w-5 h-5" : "w-4 h-4"} text-white/40`} />
         )}

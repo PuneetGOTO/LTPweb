@@ -8,10 +8,16 @@ import { AuthError } from "next-auth";
 export async function registerUser(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
+  const displayName = formData.get("displayName") as string;
   
   if (!username || !password) return { error: "Username and password are required" };
   if (password.length < 6) return { error: "Password must be at least 6 characters" };
   
+  const validIdRegex = /^[A-Za-z0-9_]+$/;
+  if (!validIdRegex.test(username)) {
+    return { error: "Username can only contain English letters, numbers, and underscores" };
+  }
+
   try {
     const existing = await prisma.user.findUnique({ where: { username } });
     if (existing) return { error: "Username already exists" };
@@ -24,7 +30,12 @@ export async function registerUser(formData: FormData) {
       data: {
         username,
         passwordHash,
-        role: count === 0 ? "ADMIN" : "USER"
+        role: count === 0 ? "ADMIN" : "USER",
+        profile: {
+          create: {
+            displayName: displayName || username
+          }
+        }
       }
     });
 

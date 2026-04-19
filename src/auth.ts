@@ -27,7 +27,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: user.id, 
             username: user.username, 
             role: user.role,
-            avatarUrl: user.profile?.avatarUrl || null
+            avatarUrl: user.profile?.avatarUrl || null,
+            displayName: user.profile?.displayName || null
           };
         }
         return null; // 登入失敗
@@ -41,6 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.role = (user as any).role;
         token.username = (user as any).username;
         token.avatarUrl = (user as any).avatarUrl;
+        token.displayName = (user as any).displayName;
       }
       // Refresh avatar on session update
       if (trigger === "update" && token.id) {
@@ -48,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { userId: token.id as string }
         });
         token.avatarUrl = profile?.avatarUrl || null;
+        token.displayName = profile?.displayName || null;
       }
       return token;
     },
@@ -57,6 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         (session.user as any).role = token.role as string;
         (session.user as any).username = token.username as string;
         (session.user as any).avatarUrl = token.avatarUrl as string | null;
+        (session.user as any).displayName = token.displayName as string | null;
       }
       return session;
     }
