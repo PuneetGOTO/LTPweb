@@ -4,12 +4,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
   USER
+  COMPANION
   ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  COMPLETED
+  CANCELLED
 }
 
 model User {
@@ -24,6 +31,11 @@ model User {
   videos        Video[]       @relation("UploadedVideos")
   viewHistory   ViewHistory[]
   likes         Like[]
+
+  ordersAsClient    Order[]   @relation("ClientOrders")
+  ordersAsCompanion Order[]   @relation("CompanionOrders")
+  reviewsGiven      Review[]  @relation("ReviewsWritten")
+  reviewsReceived   Review[]  @relation("ReviewsReceived")
 }
 
 model Profile {
@@ -31,8 +43,67 @@ model Profile {
   displayName String?
   avatarUrl   String?
   bio         String?
+  
+  // Companion specific
+  hourlyRate  Int      @default(150)
+  voiceUrl    String?
+  isOnline    Boolean  @default(false)
+  games       String   @default("Valorant") // Example: "Valorant,Apex Legends"
+  rating      Float    @default(5.0)
+  totalOrders Int      @default(0)
+
   userId      String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  gameName        String
+  durationHours   Int         @default(1)
+  totalPrice      Int         @default(0)
+  status          OrderStatus @default(PENDING)
+  scheduledFor    DateTime?
+
+  // Service configuration metadata
+  platform        String?     // "MOBILE", "PC"
+  serverName      String?     // "HK", "CN"
+  serviceType     String?     // "COMPANION", "BOOSTING"
+  wechatId        String?     // Customer WeChat ID for contact
+
+  clientId        String
+  client          User        @relation("ClientOrders", fields: [clientId], references: [id])
+  
+  companionId     String?
+  companion       User?       @relation("CompanionOrders", fields: [companionId], references: [id])
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model ServicePricing {
+  id          String   @id @default(cuid())
+  platform    String   // "MOBILE", "PC"
+  server      String?  // "HK", "CN", null
+  serviceType String   // "COMPANION", "BOOSTING"
+  hourlyRate  Int      @default(150)
+  isActive    Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([platform, server, serviceType])
+}
+
+model Review {
+  id              String   @id @default(cuid())
+  rating          Int
+  comment         String?
+  
+  reviewerId      String
+  reviewer        User     @relation("ReviewsWritten", fields: [reviewerId], references: [id])
+  
+  companionId     String
+  companion       User     @relation("ReviewsReceived", fields: [companionId], references: [id])
+
+  createdAt       DateTime @default(now())
 }
 
 model GameCategory {
@@ -46,7 +117,7 @@ model Video {
   id           String        @id @default(cuid())
   title        String
   description  String?
-  url          String        // Cloudinary HLS URL/Public ID
+  url          String        
   thumbnailUrl String?
   isPublic     Boolean       @default(true)
   viewsCount   Int           @default(0)
