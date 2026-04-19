@@ -21,7 +21,7 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
   const [previewUrl, setPreviewUrl] = useState<string | null>(avatarUrl)
   const [error, setError] = useState("")
 
-  const DISCORD_LINK = "https://discord.gg/LTP-ESPORTS"
+  const DISCORD_LINK = "https://discord.gg/a9vANGBEXh"
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click()

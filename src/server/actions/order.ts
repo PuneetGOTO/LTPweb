@@ -18,29 +18,31 @@ async function sendOrderToDiscord(order: {
   username: string
 }) {
   try {
+    const serverDisplay = order.serverName === "NONE" ? "N/A" : order.serverName
+
     const embed = {
-      title: "🎮 新訂單 / New Order",
+      title: "🎮 新訂單 New Order",
       color: 0x00F5FF,
       fields: [
-        { name: "📋 Order ID", value: `\`${order.id}\``, inline: true },
-        { name: "👤 Username", value: order.username, inline: true },
-        { name: "💬 WeChat ID", value: order.wechatId, inline: true },
-        { name: "🖥️ Platform", value: order.platform, inline: true },
-        { name: "🌍 Server", value: order.serverName === "NONE" ? "N/A" : order.serverName, inline: true },
-        { name: "⚔️ Service", value: order.serviceType, inline: true },
-        { name: "⏱️ Duration", value: `${order.durationHours} hour(s)`, inline: true },
-        { name: "💰 Total", value: `$${order.totalPrice}`, inline: true },
-        { name: "🎯 Game", value: order.gameName, inline: false },
+        { name: "📋 訂單編號 Order ID", value: `\`${order.id}\``, inline: true },
+        { name: "👤 用戶名 Username", value: order.username, inline: true },
+        { name: "💬 微信號 WeChat ID", value: order.wechatId, inline: true },
+        { name: "🖥️ 平台 Platform", value: order.platform, inline: true },
+        { name: "🌍 伺服器 Server", value: serverDisplay, inline: true },
+        { name: "⚔️ 服務類型 Service", value: order.serviceType, inline: true },
+        { name: "⏱️ 時長 Duration", value: `${order.durationHours} 小時 hour(s)`, inline: true },
+        { name: "💰 總價 Total", value: `$${order.totalPrice}`, inline: true },
+        { name: "🎯 遊戲 Game", value: order.gameName, inline: false },
       ],
       timestamp: new Date().toISOString(),
-      footer: { text: "LTP Service Platform" }
+      footer: { text: "LTP Service Platform | LTP 陪玩服務平台" }
     }
 
     await fetch(DISCORD_WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: "LTP Orders",
+        username: "LTP Orders / LTP 訂單通知",
         avatar_url: "https://cdn.discordapp.com/embed/avatars/0.png",
         embeds: [embed]
       })
