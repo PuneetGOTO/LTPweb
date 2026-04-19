@@ -2,7 +2,15 @@ import prisma from "@/lib/prisma"
 import cloudinary from "@/lib/cloudinary"
 import DashboardClient from "./DashboardClient"
 
+import { auth } from "@/auth"
+
 export default async function AdminDashboard() {
+  const session = await auth()
+  const role = (session?.user as any)?.role || "USER"
+  
+  const globalSetting = await prisma.globalSetting.findUnique({ where: { id: "global" } })
+  const hasSuperAdminPin = !!(globalSetting?.superAdminPin)
+
   const usersCount = await prisma.user.count()
   const videosCount = await prisma.video.count()
   const viewsCount = await prisma.video.aggregate({
@@ -43,6 +51,8 @@ export default async function AdminDashboard() {
       recentUsers={recentUsers}
       recentOrders={recentOrders}
       cloudinaryConnected={cloudinaryConnected}
+      userRole={role}
+      hasSuperAdminPin={hasSuperAdminPin}
     />
   )
 }

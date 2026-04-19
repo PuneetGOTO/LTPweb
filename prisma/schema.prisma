@@ -157,3 +157,8 @@ model Like {
 
   @@unique([userId, videoId])
 }
+
+model GlobalSetting {
+  id            String  @id @default("global")
+  superAdminPin String?
+}

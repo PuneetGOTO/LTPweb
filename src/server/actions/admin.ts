@@ -152,3 +152,44 @@ export async function adminDeleteUser(id: string) {
     return { error: "Could not delete user. They might be linked to strict relation data." }
   }
 }
+
+export async function claimSuperAdmin(formData: FormData) {
+  const session = await auth()
+  // Any ADMIN can attempt to claim
+  if (!session || !session.user || (session.user as any).role !== "ADMIN") {
+    return { error: "Must be a regular Admin to claim or enter Super Admin PIN." }
+  }
+  
+  const pin = formData.get("pin") as string
+  if (!pin || pin.length < 4) return { error: "PIN must be at least 4 characters long." }
+
+  const settings = await prisma.globalSetting.findUnique({ where: { id: "global" } })
+  
+  if (!settings || !settings.superAdminPin) {
+    // Phase 1: Set the PIN for the first time
+    const hashedPin = await bcrypt.hash(pin, 10)
+    await prisma.globalSetting.upsert({
+      where: { id: "global" },
+      update: { superAdminPin: hashedPin },
+      create: { id: "global", superAdminPin: hashedPin }
+    })
+    
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { role: "SUPER_ADMIN" }
+    })
+    
+    return { success: true }
+  } else {
+    // Phase 2: Verify PIN
+    const isValid = await bcrypt.compare(pin, settings.superAdminPin)
+    if (!isValid) return { error: "Incorrect Super Admin PIN." }
+    
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { role: "SUPER_ADMIN" }
+    })
+    
+    return { success: true }
+  }
+}

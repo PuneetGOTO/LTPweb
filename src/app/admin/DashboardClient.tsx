@@ -3,7 +3,9 @@ import { useState } from "react"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Users, Video as VideoIcon, Eye, Clock, UserPlus, Cloud, CloudOff, Settings } from "lucide-react"
 import { updateCloudinaryConfig } from "@/server/actions/settings"
+import { claimSuperAdmin } from "@/server/actions/admin"
 import { useRouter } from "next/navigation"
+import { ShieldAlert } from "lucide-react"
 
 export default function DashboardClient({ 
   usersCount, 
@@ -11,17 +13,47 @@ export default function DashboardClient({
   viewsCount,
   recentUsers,
   recentOrders,
-  cloudinaryConnected
+  cloudinaryConnected,
+  userRole,
+  hasSuperAdminPin
 }: { 
   usersCount: number, 
   videosCount: number, 
   viewsCount: number,
   recentUsers: any[],
   recentOrders: any[],
-  cloudinaryConnected?: boolean
+  cloudinaryConnected?: boolean,
+  userRole: string,
+  hasSuperAdminPin: boolean
 }) {
   const { t } = useLanguage()
   const router = useRouter()
+  
+  const [showSuperAdminModal, setShowSuperAdminModal] = useState(false)
+  const [pin, setPin] = useState("")
+  const [saLoading, setSaLoading] = useState(false)
+  const [saError, setSaError] = useState("")
+
+  const handleSuperAdminClaim = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaLoading(true)
+    setSaError("")
+    const formData = new FormData()
+    formData.append("pin", pin)
+    try {
+      const res = await claimSuperAdmin(formData)
+      if (res?.error) {
+        setSaError(res.error)
+      } else {
+        setShowSuperAdminModal(false)
+        router.refresh()
+      }
+    } catch (err: any) {
+      setSaError("Something went wrong.")
+    } finally {
+      setSaLoading(false)
+    }
+  }
   
   const [showCloudinaryModal, setShowCloudinaryModal] = useState(false)
   const [cName, setCName] = useState("")
@@ -116,6 +148,65 @@ export default function DashboardClient({
                 <button type="button" onClick={() => setShowCloudinaryModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-white">Cancel</button>
                 <button type="submit" disabled={cLoading} className="px-4 py-2 text-sm font-bold bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50">
                   {cLoading ? "Saving..." : "Save & Test"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Super Admin Claim Banner */}
+      {userRole === "ADMIN" && (
+        <div className="bg-gradient-to-r from-red-500/20 to-orange-500/10 border border-red-500/50 rounded-xl p-6 shadow-[0_0_15px_rgba(255,0,0,0.2)]">
+          <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold font-orbitron text-red-500 flex items-center gap-2">
+                <ShieldAlert className="w-6 h-6" /> 
+                {hasSuperAdminPin ? "ELEVATE TO SUPER ADMIN" : "INITIALIZE SUPER ADMIN"}
+              </h2>
+              <p className="text-sm text-red-200/70 mt-1">
+                {hasSuperAdminPin 
+                  ? "A Super Admin PIN has been configured. Enter it to upgrade your permissions." 
+                  : "No Super Admin PIN has been set yet. Be the first to establish the master passcode."}
+              </p>
+            </div>
+            <button 
+              onClick={() => setShowSuperAdminModal(true)}
+              className="px-6 py-2 bg-red-500 hover:bg-red-600 text-black font-bold font-orbitron uppercase tracking-widest rounded-lg transition-colors whitespace-nowrap"
+            >
+              {hasSuperAdminPin ? "ENTER PIN" : "SET PIN"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showSuperAdminModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-red-500/30 rounded-xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(255,0,0,0.2)] relative">
+            <h2 className="text-xl font-bold font-orbitron text-red-500 mb-2">
+              {hasSuperAdminPin ? "Enter Super Admin PIN" : "Setup Super Admin Master PIN"}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              {hasSuperAdminPin 
+                ? "This operation requires the global Super Admin PIN to proceed." 
+                : "You are the first to claim Super Admin. Enter a secure PIN below. Future Super Admins will need this PIN."}
+            </p>
+            
+            <form onSubmit={handleSuperAdminClaim} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-red-400 mb-1 block">SECURE PIN</label>
+                <input 
+                  type="password" required value={pin} onChange={e => setPin(e.target.value)} minLength={4}
+                  className="w-full bg-black/50 border border-red-500/30 rounded px-3 py-2 text-white outline-none focus:border-red-500 text-sm tracking-widest"
+                />
+              </div>
+              
+              {saError && <p className="text-xs text-destructive font-bold">{saError}</p>}
+              
+              <div className="flex justify-end gap-3 pt-4">
+                <button type="button" onClick={() => setShowSuperAdminModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-white">Cancel</button>
+                <button type="submit" disabled={saLoading} className="px-4 py-2 text-sm font-bold bg-red-500 text-black rounded hover:bg-red-600 disabled:opacity-50 tracking-widest">
+                  {saLoading ? "Processing..." : "CONFIRM"}
                 </button>
               </div>
             </form>
