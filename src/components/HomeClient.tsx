@@ -19,7 +19,7 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
       <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center pt-20 bg-black overflow-hidden">
+      <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center pt-20 bg-background overflow-hidden">
         
         {/* 3D Trajectory as the Hero Background */}
         <div className="absolute inset-0 z-0">
@@ -66,7 +66,7 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 md:gap-6 relative z-10 pointer-events-auto"
           >
-            <Link href="/select-service" className="group relative px-6 md:px-8 py-4 bg-accent text-white font-bold text-lg rounded-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,0,170,0.5)] w-full sm:w-auto text-center flex justify-center">
+            <Link href="/select-service" className="group relative px-6 md:px-8 py-4 bg-accent text-foreground font-bold text-lg rounded-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,0,170,0.5)] w-full sm:w-auto text-center flex justify-center">
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
               <div className="flex items-center justify-center gap-2 relative z-10">
                 <Users className="w-6 h-6" />
@@ -120,7 +120,7 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
                       ))}
                     </div>
                     
-                    <div className="w-full text-center py-2 bg-secondary text-foreground/70 font-bold rounded group-hover:bg-accent group-hover:text-white transition-all text-sm tracking-widest mt-auto">
+                    <div className="w-full text-center py-2 bg-secondary text-foreground/70 font-bold rounded group-hover:bg-accent group-hover:text-foreground transition-all text-sm tracking-widest mt-auto">
                       {t('companion.book')}
                     </div>
                   </div>

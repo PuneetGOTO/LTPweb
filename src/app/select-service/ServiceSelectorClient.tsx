@@ -54,7 +54,7 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
   const currentServer = platform === "MOBILE" ? "NONE" : (serverOption || "NONE")
 
   return (
-    <div className="min-h-screen bg-black flex flex-col relative w-full overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col relative w-full overflow-hidden">
        <Navbar />
        
        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 blur-[120px] rounded-full pointer-events-none" />
@@ -75,19 +75,19 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
                   <button 
                     onClick={() => setPlatform("MOBILE")}
-                    className="group flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-12 hover:border-primary/50 hover:bg-primary/5 transition-all text-center min-h-[300px]"
+                    className="group flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border border-border rounded-2xl p-12 hover:border-primary/50 hover:bg-primary/5 transition-all text-center min-h-[300px]"
                   >
-                     <Smartphone className="w-20 h-20 text-white/50 group-hover:text-primary transition-colors mb-6" />
-                     <h2 className="text-3xl font-black font-orbitron text-white">{t('select.mobile.title')}</h2>
+                     <Smartphone className="w-20 h-20 text-muted-foreground group-hover:text-primary transition-colors mb-6" />
+                     <h2 className="text-3xl font-black font-orbitron text-foreground">{t('select.mobile.title')}</h2>
                      <p className="text-muted-foreground mt-2">{t('select.mobile.sub')}</p>
                   </button>
 
                   <button 
                     onClick={() => setPlatform("PC")}
-                    className="group flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-12 hover:border-accent/50 hover:bg-accent/5 transition-all text-center min-h-[300px]"
+                    className="group flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border border-border rounded-2xl p-12 hover:border-accent/50 hover:bg-accent/5 transition-all text-center min-h-[300px]"
                   >
-                     <MonitorPlay className="w-20 h-20 text-white/50 group-hover:text-accent transition-colors mb-6" />
-                     <h2 className="text-3xl font-black font-orbitron text-white">{t('select.pc.title')}</h2>
+                     <MonitorPlay className="w-20 h-20 text-muted-foreground group-hover:text-accent transition-colors mb-6" />
+                     <h2 className="text-3xl font-black font-orbitron text-foreground">{t('select.pc.title')}</h2>
                      <p className="text-muted-foreground mt-2">{t('select.pc.sub')}</p>
                   </button>
                 </div>
@@ -101,7 +101,7 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
                 className="w-full flex flex-col items-center"
               >
-                <button onClick={resetSelection} className="absolute top-0 left-0 flex items-center gap-2 text-muted-foreground hover:text-white transition-colors">
+                <button onClick={resetSelection} className="absolute top-0 left-0 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
                   <ChevronLeft className="w-5 h-5"/> {t('select.btn.back')}
                 </button>
                 <h1 className="text-4xl md:text-5xl font-black font-orbitron mb-4 text-center">{t('select.server.title')}</h1>
@@ -110,19 +110,19 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
                   <button 
                     onClick={() => setServerOption("HK")}
-                    className="group flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-12 hover:border-accent/50 hover:bg-accent/5 transition-all text-center min-h-[250px]"
+                    className="group flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border border-border rounded-2xl p-12 hover:border-accent/50 hover:bg-accent/5 transition-all text-center min-h-[250px]"
                   >
-                     <Server className="w-16 h-16 text-white/50 group-hover:text-accent transition-colors mb-6" />
-                     <h2 className="text-3xl font-black font-orbitron text-white">{t('select.hk.title')}</h2>
+                     <Server className="w-16 h-16 text-muted-foreground group-hover:text-accent transition-colors mb-6" />
+                     <h2 className="text-3xl font-black font-orbitron text-foreground">{t('select.hk.title')}</h2>
                      <p className="text-muted-foreground mt-2">{t('select.hk.sub')}</p>
                   </button>
 
                   <button 
                     onClick={() => setServerOption("CN")}
-                    className="group flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-12 hover:border-red-500/50 hover:bg-red-500/5 transition-all text-center min-h-[250px]"
+                    className="group flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border border-border rounded-2xl p-12 hover:border-red-500/50 hover:bg-red-500/5 transition-all text-center min-h-[250px]"
                   >
-                     <Server className="w-16 h-16 text-white/50 group-hover:text-red-500 transition-colors mb-6" />
-                     <h2 className="text-3xl font-black font-orbitron text-white">{t('select.cn.title')}</h2>
+                     <Server className="w-16 h-16 text-muted-foreground group-hover:text-red-500 transition-colors mb-6" />
+                     <h2 className="text-3xl font-black font-orbitron text-foreground">{t('select.cn.title')}</h2>
                      <p className="text-muted-foreground mt-2">{t('select.cn.sub')}</p>
                   </button>
                 </div>
@@ -138,7 +138,7 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
               >
                 <button 
                   onClick={() => platform === "MOBILE" ? resetSelection() : setServerOption(null)} 
-                  className="absolute top-0 left-0 flex items-center gap-2 text-muted-foreground hover:text-white transition-colors"
+                  className="absolute top-0 left-0 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <ChevronLeft className="w-5 h-5"/> {t('select.btn.back')}
                 </button>
@@ -153,10 +153,10 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                       <button 
                         onClick={() => companionActive && setServiceType("COMPANION")}
                         disabled={!companionActive}
-                        className={`group relative flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border rounded-2xl p-12 transition-all text-center min-h-[250px] ${
+                        className={`group relative flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border rounded-2xl p-12 transition-all text-center min-h-[250px] ${
                           companionActive 
-                            ? 'border-white/10 hover:border-green-400/50 hover:bg-green-400/5 cursor-pointer' 
-                            : 'border-white/5 cursor-not-allowed opacity-40'
+                            ? 'border-border hover:border-green-400/50 hover:bg-green-400/5 cursor-pointer' 
+                            : 'border-border cursor-not-allowed opacity-40'
                         }`}
                       >
                          {/* Diagonal strikethrough line for disabled state */}
@@ -169,9 +169,9 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                              </div>
                            </div>
                          )}
-                         <Swords className={`w-16 h-16 mb-6 transition-colors ${companionActive ? 'text-white/50 group-hover:text-green-400' : 'text-white/20'}`} />
-                         <h2 className={`text-3xl font-black font-orbitron ${companionActive ? 'text-white' : 'text-white/30 line-through'}`}>{t('select.comp.title')}</h2>
-                         <p className={`mt-2 ${companionActive ? 'text-muted-foreground' : 'text-white/20'}`}>{t('select.comp.sub')}</p>
+                         <Swords className={`w-16 h-16 mb-6 transition-colors ${companionActive ? 'text-muted-foreground group-hover:text-green-400' : 'text-muted-foreground/60'}`} />
+                         <h2 className={`text-3xl font-black font-orbitron ${companionActive ? 'text-foreground' : 'text-muted-foreground line-through'}`}>{t('select.comp.title')}</h2>
+                         <p className={`mt-2 ${companionActive ? 'text-muted-foreground' : 'text-muted-foreground/60'}`}>{t('select.comp.sub')}</p>
                          {!companionActive && (
                            <div className="mt-4 flex items-center gap-2 text-red-400/80 text-sm font-bold">
                              <Ban className="w-4 h-4" /> {t('select.unavailable')}
@@ -188,10 +188,10 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                       <button 
                         onClick={() => boostingActive && setServiceType("BOOSTING")}
                         disabled={!boostingActive}
-                        className={`group relative flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border rounded-2xl p-12 transition-all text-center min-h-[250px] ${
+                        className={`group relative flex flex-col items-center justify-center bg-card/60 backdrop-blur-md border rounded-2xl p-12 transition-all text-center min-h-[250px] ${
                           boostingActive 
-                            ? 'border-white/10 hover:border-purple-500/50 hover:bg-purple-500/5 cursor-pointer' 
-                            : 'border-white/5 cursor-not-allowed opacity-40'
+                            ? 'border-border hover:border-purple-500/50 hover:bg-purple-500/5 cursor-pointer' 
+                            : 'border-border cursor-not-allowed opacity-40'
                         }`}
                       >
                          {/* Diagonal strikethrough line for disabled state */}
@@ -204,9 +204,9 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
                              </div>
                            </div>
                          )}
-                         <Crosshair className={`w-16 h-16 mb-6 transition-colors ${boostingActive ? 'text-white/50 group-hover:text-purple-500' : 'text-white/20'}`} />
-                         <h2 className={`text-3xl font-black font-orbitron ${boostingActive ? 'text-white' : 'text-white/30 line-through'}`}>{t('select.boost.title')}</h2>
-                         <p className={`mt-2 ${boostingActive ? 'text-muted-foreground' : 'text-white/20'}`}>{t('select.boost.sub')}</p>
+                         <Crosshair className={`w-16 h-16 mb-6 transition-colors ${boostingActive ? 'text-muted-foreground group-hover:text-purple-500' : 'text-muted-foreground/60'}`} />
+                         <h2 className={`text-3xl font-black font-orbitron ${boostingActive ? 'text-foreground' : 'text-muted-foreground line-through'}`}>{t('select.boost.title')}</h2>
+                         <p className={`mt-2 ${boostingActive ? 'text-muted-foreground' : 'text-muted-foreground/60'}`}>{t('select.boost.sub')}</p>
                          {!boostingActive && (
                            <div className="mt-4 flex items-center gap-2 text-red-400/80 text-sm font-bold">
                              <Ban className="w-4 h-4" /> {t('select.unavailable')}
@@ -224,17 +224,17 @@ export default function ServiceSelectorClient({ serviceAvailability }: Props) {
               <motion.div 
                 key="step-final"
                 initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
-                className="w-full flex flex-col items-center max-w-2xl bg-white/5 border border-white/20 p-8 rounded-2xl backdrop-blur-lg"
+                className="w-full flex flex-col items-center max-w-2xl bg-secondary border border-border p-8 rounded-2xl backdrop-blur-lg"
               >
-                <button onClick={() => setServiceType(null)} className="self-start flex items-center gap-2 text-muted-foreground hover:text-white transition-colors mb-8">
+                <button onClick={() => setServiceType(null)} className="self-start flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
                   <ChevronLeft className="w-5 h-5"/> {t('select.btn.redo')}
                 </button>
                 <div className="w-full text-center space-y-4 mb-10">
                   <h3 className="text-xl text-muted-foreground">{t('select.selections')}</h3>
-                  <div className="flex flex-wrap justify-center gap-4 text-2xl font-black font-orbitron text-white">
+                  <div className="flex flex-wrap justify-center gap-4 text-2xl font-black font-orbitron text-foreground">
                      <span className="text-primary">{platform}</span>
-                     {serverOption && <><ArrowRight className="text-white/30" /><span className="text-accent">{serverOption}</span></>}
-                     <><ArrowRight className="text-white/30" /><span className="text-green-400">{serviceType}</span></>
+                     {serverOption && <><ArrowRight className="text-muted-foreground" /><span className="text-accent">{serverOption}</span></>}
+                     <><ArrowRight className="text-muted-foreground" /><span className="text-green-400">{serviceType}</span></>
                   </div>
                 </div>
 

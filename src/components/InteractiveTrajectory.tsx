@@ -127,22 +127,22 @@ export default function InteractiveTrajectory() {
 
       {/* Telemetry Display */}
       <div className="absolute top-6 right-6 text-right pointer-events-none font-orbitron text-xs flex flex-col gap-1">
-        <div className="text-white/50">MISSION TIME: <span className="text-white">T+{(progress * 100).toFixed(1)}%</span></div>
-        <div className="text-white/50">PHASE: <span className="text-accent">{phase}</span></div>
-        <div className="text-white/50 mt-2">SYS STATUS: <span className="text-green-400">NOMINAL</span></div>
+        <div className="text-muted-foreground">MISSION TIME: <span className="text-foreground">T+{(progress * 100).toFixed(1)}%</span></div>
+        <div className="text-muted-foreground">PHASE: <span className="text-accent">{phase}</span></div>
+        <div className="text-muted-foreground mt-2">SYS STATUS: <span className="text-green-400">NOMINAL</span></div>
       </div>
 
       {/* Interactive Controls Panel */}
       <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-black/90 to-transparent flex items-center gap-4">
         <button 
           onClick={() => setIsPlaying(!isPlaying)}
-          className="text-white hover:text-primary transition-colors"
+          className="text-foreground hover:text-primary transition-colors"
         >
           {isPlaying ? <PauseCircle className="w-8 h-8 md:w-10 md:h-10" /> : <PlayCircle className="w-8 h-8 md:w-10 md:h-10" />}
         </button>
         
         <div className="flex-1 flex flex-col gap-2">
-          <div className="hidden md:flex justify-between text-[10px] text-white/50 font-bold tracking-widest font-orbitron">
+          <div className="hidden md:flex justify-between text-[10px] text-muted-foreground font-bold tracking-widest font-orbitron">
             <span>EARTH</span>
             <span className="text-accent">MOON</span>
             <span>EARTH</span>
@@ -157,7 +157,7 @@ export default function InteractiveTrajectory() {
               setIsPlaying(false)
               setProgress(parseFloat(e.target.value))
             }}
-            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-accent transition-colors"
+            className="w-full h-2 bg-secondary rounded-lg appearance-none cursor-pointer accent-primary hover:accent-accent transition-colors"
           />
         </div>
       </div>

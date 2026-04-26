@@ -24,7 +24,7 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
         <p className="text-sm md:text-base text-muted-foreground mb-8">{t('comp.list.sub')}</p>
 
         {/* Platform Tabs */}
-        <div className="flex gap-4 mb-8 justify-center md:justify-start border-b border-white/10 pb-4">
+        <div className="flex gap-4 mb-8 justify-center md:justify-start border-b border-border pb-4">
           <button 
             onClick={() => setActiveTab("PC")}
             className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "PC" ? "border-accent text-accent bg-accent/10" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
@@ -66,12 +66,12 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                       </span>
-                      <span className="text-xs font-bold text-white drop-shadow-md">{t('companion.online')}</span>
+                      <span className="text-xs font-bold text-foreground drop-shadow-md">{t('companion.online')}</span>
                     </div>
                   ) : (
                     <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
                       <span className="relative flex h-3 w-3 bg-gray-500 rounded-full"></span>
-                      <span className="text-xs font-bold text-white drop-shadow-md">{t('companion.offline')}</span>
+                      <span className="text-xs font-bold text-foreground drop-shadow-md">{t('companion.offline')}</span>
                     </div>
                   )}
                 </div>

@@ -25,7 +25,7 @@ export default function AdminNavClient() {
           <Link 
             key={link.href} 
             href={link.href}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-semibold tracking-wide ${active ? 'bg-primary/20 text-primary border border-primary/50 shadow-[0_0_15px_rgba(0,245,255,0.2)]' : 'text-muted-foreground hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all font-semibold tracking-wide ${active ? 'bg-primary/20 text-primary border border-primary/50 shadow-[0_0_15px_rgba(0,245,255,0.2)]' : 'text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
           >
             <Icon className="w-5 h-5" />
             {link.label}

@@ -70,7 +70,7 @@ export default function AdminPricingClient({ pricings }: { pricings: any[] }) {
 
   return (
     <div>
-       <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+       <div className="flex justify-between items-center mb-8 border-b border-border pb-4">
          <h1 className="text-3xl font-bold font-orbitron text-primary flex items-center gap-3">
            <Settings className="w-8 h-8" /> {t('admin.pricing.title')}
          </h1>
@@ -78,9 +78,9 @@ export default function AdminPricingClient({ pricings }: { pricings: any[] }) {
 
        {error && <div className="p-3 bg-destructive/20 text-destructive font-bold text-sm mb-6 rounded">{error}</div>}
 
-       <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+       <div className="bg-card backdrop-blur-xl border border-border rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
          <table className="w-full text-left">
-           <thead className="bg-white/5 border-b border-white/10 text-xs text-muted-foreground font-orbitron tracking-widest">
+           <thead className="bg-secondary border-b border-border text-xs text-muted-foreground font-orbitron tracking-widest">
              <tr>
                <th className="p-4">{t('checkout.platform')}</th>
                <th className="p-4">{t('checkout.server')}</th>
@@ -93,7 +93,7 @@ export default function AdminPricingClient({ pricings }: { pricings: any[] }) {
            <tbody>
              {pricings.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center bg-white/5">
+                  <td colSpan={6} className="p-8 text-center bg-secondary">
                     <p className="text-muted-foreground font-bold mb-4">{t('admin.pricing.empty')}</p>
                     <button 
                       onClick={handleSeed}
@@ -107,9 +107,9 @@ export default function AdminPricingClient({ pricings }: { pricings: any[] }) {
                 </tr>
              ) : (
                 pricings.map(p => (
-                  <tr key={p.id} className={`border-b border-white/5 hover:bg-white/5 transition-colors ${!activeStates[p.id] ? 'opacity-50' : ''}`}>
-                    <td className="p-4 font-black text-white">{p.platform}</td>
-                    <td className="p-4 font-bold text-white/70">{p.server === "NONE" ? "N/A" : p.server}</td>
+                  <tr key={p.id} className={`border-b border-border hover:bg-secondary transition-colors ${!activeStates[p.id] ? 'opacity-50' : ''}`}>
+                    <td className="p-4 font-black text-foreground">{p.platform}</td>
+                    <td className="p-4 font-bold text-foreground/70">{p.server === "NONE" ? "N/A" : p.server}</td>
                     <td className={`p-4 font-black ${p.serviceType === 'COMPANION' ? 'text-green-400' : 'text-purple-500'}`}>
                       {!activeStates[p.id] && <span className="line-through">{p.serviceType}</span>}
                       {activeStates[p.id] && p.serviceType}
@@ -119,7 +119,7 @@ export default function AdminPricingClient({ pricings }: { pricings: any[] }) {
                         type="number" 
                         value={rates[p.id]} 
                         onChange={(e) => handleChange(p.id, e.target.value)}
-                        className="bg-white/5 border border-white/20 rounded px-3 py-1 outline-none text-white font-bold w-24 focus:border-primary"
+                        className="bg-secondary border border-border rounded px-3 py-1 outline-none text-foreground font-bold w-24 focus:border-primary"
                         suppressHydrationWarning={true}
                       />
                     </td>

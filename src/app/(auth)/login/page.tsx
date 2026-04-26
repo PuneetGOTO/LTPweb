@@ -36,7 +36,7 @@ export default function LoginPage() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/60 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+      className="bg-card backdrop-blur-xl p-8 rounded-2xl border border-border shadow-[0_0_40px_rgba(0,0,0,0.5)]"
     >
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold font-orbitron mb-2">ACCESS HUB</h1>
@@ -54,7 +54,7 @@ export default function LoginPage() {
               name="username" 
               type="text" 
               required
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="e.g. shadow_player"
             />
           </div>
@@ -68,7 +68,7 @@ export default function LoginPage() {
               name="password" 
               type="password" 
               required
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="••••••••"
             />
           </div>

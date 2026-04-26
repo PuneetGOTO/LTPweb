@@ -87,7 +87,7 @@ export default function DashboardClient({
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-end border-b border-white/10 pb-4 mb-8">
+      <div className="flex justify-between items-end border-b border-border pb-4 mb-8">
         <h1 className="text-3xl font-bold font-orbitron text-primary">
           {t('admin.nav.dashboard')}
         </h1>
@@ -105,7 +105,7 @@ export default function DashboardClient({
           )}
           <button 
             onClick={() => setShowCloudinaryModal(true)}
-            className="p-1 text-muted-foreground hover:text-white transition-colors"
+            className="p-1 text-muted-foreground hover:text-foreground transition-colors"
             title="Configure Cloudinary"
           >
             <Settings className="w-4 h-4" />
@@ -114,9 +114,9 @@ export default function DashboardClient({
       </div>
 
       {showCloudinaryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-slate-900 border border-white/10 rounded-xl p-6 w-full max-w-md shadow-2xl relative">
-            <h2 className="text-xl font-bold font-orbitron text-white mb-4">Cloudinary Config</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-border rounded-xl p-6 w-full max-w-md shadow-2xl relative">
+            <h2 className="text-xl font-bold font-orbitron text-foreground mb-4">Cloudinary Config</h2>
             <p className="text-sm text-muted-foreground mb-6">Enter your Cloudinary API credentials. These will be saved to your server's .env file and applied immediately.</p>
             
             <form onSubmit={handleCloudinarySave} className="space-y-4">
@@ -124,29 +124,29 @@ export default function DashboardClient({
                 <label className="text-xs font-bold text-muted-foreground mb-1 block">CLOUD NAME</label>
                 <input 
                   type="text" required value={cName} onChange={e => setCName(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                  className="w-full bg-input border border-border rounded px-3 py-2 text-foreground outline-none focus:border-accent text-sm"
                 />
               </div>
               <div>
                 <label className="text-xs font-bold text-muted-foreground mb-1 block">API KEY</label>
                 <input 
                   type="text" required value={cKey} onChange={e => setCKey(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                  className="w-full bg-input border border-border rounded px-3 py-2 text-foreground outline-none focus:border-accent text-sm"
                 />
               </div>
               <div>
                 <label className="text-xs font-bold text-muted-foreground mb-1 block">API SECRET</label>
                 <input 
                   type="password" required value={cSecret} onChange={e => setCSecret(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2 text-white outline-none focus:border-accent text-sm"
+                  className="w-full bg-input border border-border rounded px-3 py-2 text-foreground outline-none focus:border-accent text-sm"
                 />
               </div>
               
               {cError && <p className="text-xs text-destructive font-bold">{cError}</p>}
               
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowCloudinaryModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-white">Cancel</button>
-                <button type="submit" disabled={cLoading} className="px-4 py-2 text-sm font-bold bg-accent text-white rounded hover:bg-accent/80 disabled:opacity-50">
+                <button type="button" onClick={() => setShowCloudinaryModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-foreground">Cancel</button>
+                <button type="submit" disabled={cLoading} className="px-4 py-2 text-sm font-bold bg-accent text-foreground rounded hover:bg-accent/80 disabled:opacity-50">
                   {cLoading ? "Saving..." : "Save & Test"}
                 </button>
               </div>
@@ -181,7 +181,7 @@ export default function DashboardClient({
       )}
 
       {showSuperAdminModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-red-500/30 rounded-xl p-6 w-full max-w-md shadow-[0_0_50px_rgba(255,0,0,0.2)] relative">
             <h2 className="text-xl font-bold font-orbitron text-red-500 mb-2">
               {hasSuperAdminPin ? "Enter Super Admin PIN" : "Setup Super Admin Master PIN"}
@@ -197,14 +197,14 @@ export default function DashboardClient({
                 <label className="text-xs font-bold text-red-400 mb-1 block">SECURE PIN</label>
                 <input 
                   type="password" required value={pin} onChange={e => setPin(e.target.value)} minLength={4}
-                  className="w-full bg-black/50 border border-red-500/30 rounded px-3 py-2 text-white outline-none focus:border-red-500 text-sm tracking-widest"
+                  className="w-full bg-input border border-red-500/30 rounded px-3 py-2 text-foreground outline-none focus:border-red-500 text-sm tracking-widest"
                 />
               </div>
               
               {saError && <p className="text-xs text-destructive font-bold">{saError}</p>}
               
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowSuperAdminModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-white">Cancel</button>
+                <button type="button" onClick={() => setShowSuperAdminModal(false)} className="px-4 py-2 text-sm font-bold text-muted-foreground hover:text-foreground">Cancel</button>
                 <button type="submit" disabled={saLoading} className="px-4 py-2 text-sm font-bold bg-red-500 text-black rounded hover:bg-red-600 disabled:opacity-50 tracking-widest">
                   {saLoading ? "Processing..." : "CONFIRM"}
                 </button>
@@ -215,17 +215,17 @@ export default function DashboardClient({
       )}
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-black to-slate-900 border border-white/10 rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(0,245,255,0.1)]">
+        <div className="bg-gradient-to-br from-background to-slate-900 border border-border rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(0,245,255,0.1)]">
           <div className="text-sm font-bold text-muted-foreground mb-4 flex items-center gap-2"><Users className="w-4 h-4 text-primary"/> TOTAL USERS</div>
           <div className="text-4xl font-black text-primary font-orbitron">{usersCount}</div>
         </div>
         
-        <div className="bg-gradient-to-br from-black to-slate-900 border border-white/10 rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(255,0,170,0.1)]">
+        <div className="bg-gradient-to-br from-background to-slate-900 border border-border rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(255,0,170,0.1)]">
           <div className="text-sm font-bold text-muted-foreground mb-4 flex items-center gap-2"><VideoIcon className="w-4 h-4 text-accent"/> PUBLISHED VIDEOS</div>
           <div className="text-4xl font-black text-accent font-orbitron">{videosCount}</div>
         </div>
         
-        <div className="bg-gradient-to-br from-black to-slate-900 border border-white/10 rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.1)]">
+        <div className="bg-gradient-to-br from-background to-slate-900 border border-border rounded-xl p-6 backdrop-blur-md shadow-[0_0_20px_rgba(34,197,94,0.1)]">
           <div className="text-sm font-bold text-muted-foreground mb-4 flex items-center gap-2"><Eye className="w-4 h-4 text-green-400"/> GLOBAL VIEWS</div>
           <div className="text-4xl font-black text-green-400 font-orbitron">{viewsCount}</div>
         </div>
@@ -233,15 +233,15 @@ export default function DashboardClient({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recent Orders */}
-        <div className="bg-black/60 border border-white/10 rounded-xl p-6">
-          <h2 className="text-lg font-bold font-orbitron mb-4 text-white flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h2 className="text-lg font-bold font-orbitron mb-4 text-foreground flex items-center gap-2">
             <Clock className="w-5 h-5 text-primary" /> {t('admin.dashboard.recentOrders')}
           </h2>
           <div className="space-y-4">
             {recentOrders.map(order => (
-              <div key={order.id} className="flex justify-between items-center bg-white/5 border border-white/5 p-3 rounded-lg">
+              <div key={order.id} className="flex justify-between items-center bg-secondary border border-border p-3 rounded-lg">
                 <div>
-                  <div className="text-sm font-semibold text-white">
+                  <div className="text-sm font-semibold text-foreground">
                     {order.client?.username} <span className="text-muted-foreground px-1">→</span> <span className="text-accent">{order.companion?.username}</span>
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
@@ -266,14 +266,14 @@ export default function DashboardClient({
         </div>
 
         {/* Recent Users */}
-        <div className="bg-black/60 border border-white/10 rounded-xl p-6">
-          <h2 className="text-lg font-bold font-orbitron mb-4 text-white flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h2 className="text-lg font-bold font-orbitron mb-4 text-foreground flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-accent" /> {t('admin.dashboard.recentUsers')}
           </h2>
           <div className="space-y-4">
             {recentUsers.map(user => (
-              <div key={user.id} className="flex items-center gap-4 bg-white/5 border border-white/5 p-3 rounded-lg">
-                <div className="w-10 h-10 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex items-center justify-center text-white font-orbitron font-bold overflow-hidden">
+              <div key={user.id} className="flex items-center gap-4 bg-secondary border border-border p-3 rounded-lg">
+                <div className="w-10 h-10 rounded border border-border bg-gradient-to-br from-background to-secondary flex items-center justify-center text-foreground font-orbitron font-bold overflow-hidden">
                   {user.profile?.avatarUrl ? (
                     <img src={user.profile.avatarUrl} alt={user.profile?.displayName || user.username} className="w-full h-full object-cover" />
                   ) : (
@@ -281,7 +281,7 @@ export default function DashboardClient({
                   )}
                 </div>
                 <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">
+                  <div className="text-sm font-semibold text-foreground">
                     {user.profile?.displayName || user.username}
                     {user.profile?.displayName && <span className="ml-2 text-[10px] text-muted-foreground">@{user.username}</span>}
                   </div>
@@ -291,7 +291,7 @@ export default function DashboardClient({
                   <span className={`text-[10px] px-2 py-1 rounded font-bold tracking-wider 
                     ${user.role === 'ADMIN' ? 'bg-primary/20 text-primary border border-primary/50' : 
                       user.role === 'COMPANION' ? 'bg-accent/20 text-accent border border-accent/50' :
-                      'bg-white/5 border border-white/10 text-muted-foreground'}`}>
+                      'bg-secondary border border-border text-muted-foreground'}`}>
                     {user.role}
                   </span>
                 </div>

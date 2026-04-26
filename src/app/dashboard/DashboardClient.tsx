@@ -95,11 +95,11 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
               )}
               
               {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-card opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 {uploading ? (
                   <Loader2 className="w-6 h-6 text-primary animate-spin" />
                 ) : (
-                  <Camera className="w-6 h-6 text-white" />
+                  <Camera className="w-6 h-6 text-foreground" />
                 )}
               </div>
             </button>
@@ -153,14 +153,14 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
 
                      {order.status === 'PENDING' && (
                        <div className="mt-4 flex gap-2">
-                         <a href={DISCORD_LINK} target="_blank" className="flex-1 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors">
+                         <a href={DISCORD_LINK} target="_blank" className="flex-1 bg-[#5865F2] hover:bg-[#4752C4] text-foreground font-bold py-2 rounded text-sm flex items-center justify-center gap-2 transition-colors">
                            <MessageSquare className="w-4 h-4"/> 
                            {t('discord.pay')}
                          </a>
                          <button 
                            onClick={() => handleCancel(order.id)}
                            disabled={cancelling === order.id}
-                           className="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded text-sm font-bold hover:bg-red-500 hover:text-white transition-all disabled:opacity-50 flex items-center gap-1.5"
+                           className="px-4 py-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded text-sm font-bold hover:bg-red-500 hover:text-foreground transition-all disabled:opacity-50 flex items-center gap-1.5"
                          >
                            <XCircle className="w-4 h-4" />
                            {cancelling === order.id ? '...' : t('dash.cancel.btn')}

@@ -54,7 +54,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-white/10 pb-4 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-border pb-4 gap-4">
         <h1 className="text-3xl font-bold font-orbitron text-primary">{t('admin.user.title')}</h1>
         <div className="flex w-full md:w-auto items-center gap-4">
            <input
@@ -62,7 +62,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
              placeholder={t('admin.search.user')}
              value={searchTerm}
              onChange={(e) => setSearchTerm(e.target.value)}
-             className="px-4 py-2 bg-white/5 border border-white/10 rounded text-sm outline-none focus:border-primary text-white w-full md:w-64"
+             className="px-4 py-2 bg-secondary border border-border rounded text-sm outline-none focus:border-primary text-foreground w-full md:w-64"
            />
            <button onClick={() => setIsCreateOpen(true)} className="px-4 py-2 bg-primary text-black font-bold tracking-widest rounded text-sm hover:scale-105 transition-all shadow-[0_0_15px_rgba(0,245,255,0.4)] whitespace-nowrap">
              {t('admin.user.add')}
@@ -70,9 +70,9 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
         </div>
       </div>
 
-      <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+      <div className="bg-card backdrop-blur-xl border border-border rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
          <table className="w-full text-left table-auto">
-           <thead className="bg-white/5 border-b border-white/10 text-xs text-muted-foreground font-orbitron tracking-widest">
+           <thead className="bg-secondary border-b border-border text-xs text-muted-foreground font-orbitron tracking-widest">
              <tr>
                <th className="p-4">{t('admin.table.username')}</th>
                <th className="p-4">{t('admin.table.role')}</th>
@@ -82,10 +82,10 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
            </thead>
            <tbody>
              {filteredUsers.map(user => (
-               <tr key={user.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                 <td className="p-4 text-sm font-semibold text-white">
+               <tr key={user.id} className="border-b border-border hover:bg-secondary transition-colors">
+                 <td className="p-4 text-sm font-semibold text-foreground">
                    <div className="flex items-center gap-3">
-                     <div className="w-8 h-8 rounded border border-white/10 bg-gradient-to-br from-black to-slate-800 flex flex-shrink-0 items-center justify-center text-white font-orbitron shadow-inner shrink-0 overflow-hidden">
+                     <div className="w-8 h-8 rounded border border-border bg-gradient-to-br from-background to-secondary flex flex-shrink-0 items-center justify-center text-foreground font-orbitron shadow-inner shrink-0 overflow-hidden">
                         {user.profile?.avatarUrl ? (
                           <img src={user.profile.avatarUrl} alt={user.profile?.displayName || user.username} className="w-full h-full object-cover" />
                         ) : (
@@ -102,7 +102,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                    <span className={`text-xs px-2 py-1 rounded font-bold tracking-wider 
                       ${user.role === 'ADMIN' ? 'bg-primary/20 text-primary border border-primary/50 shadow-[0_0_10px_rgba(0,245,255,0.2)]' : 
                         user.role === 'COMPANION' ? 'bg-accent/20 text-accent border border-accent/50 shadow-[0_0_10px_rgba(255,0,170,0.2)]' :
-                        'bg-white/5 border border-white/10 text-muted-foreground'}`}>
+                        'bg-secondary border border-border text-muted-foreground'}`}>
                      {user.role}
                    </span>
                  </td>
@@ -111,7 +111,7 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                  </td>
                  <td className="p-4 text-center">
                     <div className="flex items-center justify-center gap-2">
-                       <button onClick={() => setEditingUser(user)} className="p-2 text-white/50 hover:text-white transition-colors"><Edit className="w-4 h-4"/></button>
+                       <button onClick={() => setEditingUser(user)} className="p-2 text-muted-foreground hover:text-foreground transition-colors"><Edit className="w-4 h-4"/></button>
                        <button onClick={() => handleDelete(user.id)} className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"><Trash2 className="w-4 h-4"/></button>
                     </div>
                  </td>
@@ -128,23 +128,23 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
 
       {/* CREATE MODAL */}
       {isCreateOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-          <div className="bg-background border border-white/10 rounded-xl p-8 max-w-md w-full relative shadow-[0_0_50px_rgba(0,245,255,0.2)]">
-             <button onClick={() => setIsCreateOpen(false)} className="absolute top-4 right-4 text-white/50 hover:text-white"><X className="w-5 h-5"/></button>
-             <h2 className="text-2xl font-bold font-orbitron text-white mb-6">{t('admin.user.new')}</h2>
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+          <div className="bg-background border border-border rounded-xl p-8 max-w-md w-full relative shadow-[0_0_50px_rgba(0,245,255,0.2)]">
+             <button onClick={() => setIsCreateOpen(false)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"><X className="w-5 h-5"/></button>
+             <h2 className="text-2xl font-bold font-orbitron text-foreground mb-6">{t('admin.user.new')}</h2>
              <form onSubmit={handleCreate} className="space-y-4">
                {error && <div className="p-2 bg-destructive/20 text-destructive text-sm rounded">{error}</div>}
                <div>
                   <label className="text-xs text-muted-foreground">{t('admin.table.username')}</label>
-                  <input name="username" required className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-primary" />
+                  <input name="username" required className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-primary" />
                </div>
                <div>
                   <label className="text-xs text-muted-foreground">{t('admin.user.password')}</label>
-                  <input name="password" type="password" required className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-primary" />
+                  <input name="password" type="password" required className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-primary" />
                </div>
                <div>
                   <label className="text-xs text-muted-foreground">{t('admin.table.role')}</label>
-                  <select name="role" className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-primary">
+                  <select name="role" className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-primary">
                     <option value="USER" className="text-black">USER</option>
                     <option value="COMPANION" className="text-black">COMPANION</option>
                     <option value="ADMIN" className="text-black">ADMIN</option>
@@ -159,34 +159,34 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
 
       {/* EDIT MODAL */}
       {editingUser && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-          <div className="bg-background border border-white/10 rounded-xl p-8 max-w-md w-full relative shadow-[0_0_50px_rgba(255,0,170,0.2)]">
-             <button onClick={() => setEditingUser(null)} className="absolute top-4 right-4 text-white/50 hover:text-white"><X className="w-5 h-5"/></button>
-             <h2 className="text-2xl font-bold font-orbitron text-white mb-6">{t('admin.user.edit')}: {editingUser.username}</h2>
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+          <div className="bg-background border border-border rounded-xl p-8 max-w-md w-full relative shadow-[0_0_50px_rgba(255,0,170,0.2)]">
+             <button onClick={() => setEditingUser(null)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"><X className="w-5 h-5"/></button>
+             <h2 className="text-2xl font-bold font-orbitron text-foreground mb-6">{t('admin.user.edit')}: {editingUser.username}</h2>
              <form onSubmit={handleUpdate} className="space-y-4">
                <input type="hidden" name="id" value={editingUser.id} />
                {error && <div className="p-2 bg-destructive/20 text-destructive text-sm rounded">{error}</div>}
                <div>
                   <label className="text-xs text-muted-foreground">DISPLAY NAME</label>
-                  <input name="displayName" type="text" defaultValue={editingUser.profile?.displayName || ''} placeholder="Public nickname" className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+                  <input name="displayName" type="text" defaultValue={editingUser.profile?.displayName || ''} placeholder="Public nickname" className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-accent" />
                </div>
                <div>
                   <label className="text-xs text-muted-foreground">NEW {t('admin.user.password')} (OPTIONAL)</label>
-                  <input name="password" type="password" placeholder="Leave empty to keep current" className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+                  <input name="password" type="password" placeholder="Leave empty to keep current" className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-accent" />
                </div>
                <div>
                   <label className="text-xs text-muted-foreground">UPDATE {t('admin.table.role')}</label>
-                  <select name="role" defaultValue={editingUser.role} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent">
+                  <select name="role" defaultValue={editingUser.role} className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-accent">
                     <option value="USER" className="text-black">USER</option>
                     <option value="COMPANION" className="text-black">COMPANION</option>
                     <option value="ADMIN" className="text-black">ADMIN</option>
                     <option value="SUPER_ADMIN" className="text-black">SUPER_ADMIN</option>
                   </select>
                </div>
-               <div className="border-t border-white/10 pt-4 mt-4 space-y-4">
+               <div className="border-t border-border pt-4 mt-4 space-y-4">
                   <div>
                     <label className="text-xs text-accent font-bold">COMPANION PLATFORM</label>
-                    <select name="platforms" defaultValue={editingUser.profile?.platforms || 'PC'} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent">
+                    <select name="platforms" defaultValue={editingUser.profile?.platforms || 'PC'} className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-accent">
                       <option value="PC" className="text-black">PC Gaming (端游)</option>
                       <option value="MOBILE" className="text-black">Mobile Gaming (手游)</option>
                       <option value="PC,MOBILE" className="text-black">Both (端游 & 手游)</option>
@@ -194,11 +194,11 @@ export default function AdminUsersClient({ users }: { users: any[] }) {
                   </div>
                   <div>
                     <label className="text-xs text-accent font-bold">{t('admin.user.rate')}</label>
-                    <input name="hourlyRate" type="number" defaultValue={editingUser.profile?.hourlyRate || 150} className="w-full mt-1 bg-white/5 border border-white/10 rounded p-2 text-white outline-none focus:border-accent" />
+                    <input name="hourlyRate" type="number" defaultValue={editingUser.profile?.hourlyRate || 150} className="w-full mt-1 bg-secondary border border-border rounded p-2 text-foreground outline-none focus:border-accent" />
                   </div>
                </div>
                
-               <button type="submit" disabled={loading} className="w-full mt-4 bg-accent text-white font-bold py-2 rounded tracking-widest shadow-[0_0_15px_rgba(255,0,170,0.4)]">{loading ? "SAVING..." : t('admin.user.update')}</button>
+               <button type="submit" disabled={loading} className="w-full mt-4 bg-accent text-foreground font-bold py-2 rounded tracking-widest shadow-[0_0_15px_rgba(255,0,170,0.4)]">{loading ? "SAVING..." : t('admin.user.update')}</button>
              </form>
           </div>
         </div>

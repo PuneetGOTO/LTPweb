@@ -45,7 +45,7 @@ export default function RegisterPage() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/60 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+      className="bg-card backdrop-blur-xl p-8 rounded-2xl border border-border shadow-[0_0_40px_rgba(0,0,0,0.5)]"
     >
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold font-orbitron mb-2">JOIN LTP</h1>
@@ -66,7 +66,7 @@ export default function RegisterPage() {
               minLength={3}
               pattern="^[A-Za-z0-9_]+$"
               title="Only English letters, numbers, and underscores are allowed"
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="e.g. shadow_player"
             />
           </div>
@@ -79,7 +79,7 @@ export default function RegisterPage() {
             <input 
               name="displayName" 
               type="text" 
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="Your public nickname"
             />
           </div>
@@ -94,7 +94,7 @@ export default function RegisterPage() {
               type="password" 
               required
               minLength={6}
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="••••••••"
             />
           </div>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
               name="confirmPassword" 
               type="password" 
               required
-              className="w-full bg-input/40 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-white" 
+              className="w-full bg-input/40 border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all rounded-lg py-3 pl-10 pr-4 text-foreground" 
               placeholder="••••••••"
             />
           </div>
@@ -117,7 +117,7 @@ export default function RegisterPage() {
         <button 
           type="submit" 
           disabled={loading}
-          className="w-full py-3 bg-accent text-white font-bold rounded-lg mt-6 hover:bg-accent/90 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,0,170,0.4)] disabled:opacity-50 transition-all active:scale-95"
+          className="w-full py-3 bg-accent text-foreground font-bold rounded-lg mt-6 hover:bg-accent/90 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,0,170,0.4)] disabled:opacity-50 transition-all active:scale-95"
         >
           {loading ? "INITIALIZING..." : "REGISTER"}
           {!loading && <UserPlus className="w-5 h-5" />}

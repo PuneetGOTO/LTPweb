@@ -20,7 +20,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
         initial={{ opacity: 1, pointerEvents: "auto" }}
         animate={{ opacity: 0, transitionEnd: { display: "none", pointerEvents: "none" } }}
         transition={{ duration: 1.5, ease: "easeInOut" }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black"
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-background"
       >
         <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
           

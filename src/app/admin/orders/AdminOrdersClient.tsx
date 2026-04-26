@@ -22,7 +22,7 @@ export default function AdminOrdersClient({ orders }: { orders: any[] }) {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-white/10 pb-4 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-border pb-4 gap-4">
         <h1 className="text-3xl font-bold font-orbitron text-primary">{t('admin.orders.title')}</h1>
         <div className="flex gap-2">
           {['ALL', 'PENDING', 'ACCEPTED', 'COMPLETED', 'CANCELLED'].map(status => (
@@ -32,7 +32,7 @@ export default function AdminOrdersClient({ orders }: { orders: any[] }) {
               className={`px-3 py-1 rounded text-xs font-bold tracking-widest transition-all ${
                 filter === status 
                   ? 'bg-primary text-black shadow-[0_0_10px_rgba(0,245,255,0.4)]' 
-                  : 'bg-white/5 text-muted-foreground hover:bg-white/10'
+                  : 'bg-secondary text-muted-foreground hover:bg-secondary'
               }`}
             >
               {status}
@@ -41,9 +41,9 @@ export default function AdminOrdersClient({ orders }: { orders: any[] }) {
         </div>
       </div>
 
-      <div className="bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+      <div className="bg-card backdrop-blur-xl border border-border rounded-xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)]">
          <table className="w-full text-left table-auto">
-           <thead className="bg-white/5 border-b border-white/10 text-xs text-muted-foreground font-orbitron tracking-widest">
+           <thead className="bg-secondary border-b border-border text-xs text-muted-foreground font-orbitron tracking-widest">
              <tr>
                <th className="p-4">ID</th>
                <th className="p-4">{t('admin.order.client')}</th>
@@ -55,9 +55,9 @@ export default function AdminOrdersClient({ orders }: { orders: any[] }) {
            </thead>
            <tbody>
              {filteredOrders.map(order => (
-               <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+               <tr key={order.id} className="border-b border-border hover:bg-secondary transition-colors">
                  <td className="p-4 text-xs font-mono text-muted-foreground">{order.id.slice(-6).toUpperCase()}</td>
-                 <td className="p-4 text-sm font-semibold text-white">
+                 <td className="p-4 text-sm font-semibold text-foreground">
                    <span className="truncate max-w-[120px]">{order.client.username}</span>
                  </td>
                  <td className="p-4 text-sm font-bold text-accent">

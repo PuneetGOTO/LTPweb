@@ -11,8 +11,8 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   // Protect route
   if (!platform || !serviceType) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-         <h1 className="text-white text-2xl font-bold">Invalid checkout link.</h1>
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+         <h1 className="text-foreground text-2xl font-bold">Invalid checkout link.</h1>
       </div>
     )
   }
@@ -20,7 +20,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
   const pricing = await getServicePrice(platform, serverName || "NONE", serviceType)
 
   return (
-    <div className="min-h-screen bg-black flex flex-col relative w-full overflow-hidden">
+    <div className="min-h-screen bg-background flex flex-col relative w-full overflow-hidden">
        <Navbar />
        {/* Background */}
        <div className="absolute bottom-0 left-1/2 w-[800px] h-[800px] bg-primary/10 blur-[150px] -translate-x-1/2 rounded-full pointer-events-none" />
