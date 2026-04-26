@@ -19,8 +19,14 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
       <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center pt-20">
-        <div className="z-10 flex flex-col items-center text-center px-4 max-w-5xl">
+      <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center pt-20 bg-black overflow-hidden">
+        
+        {/* 3D Trajectory as the Hero Background */}
+        <div className="absolute inset-0 z-0">
+          <InteractiveTrajectory />
+        </div>
+
+        <div className="z-10 flex flex-col items-center text-center px-4 max-w-5xl pointer-events-none">
           {/* HUGE BLURRED BACKGROUND TEXT "LTP" */}
           <div className="absolute font-black font-orbitron text-[38vw] tracking-tighter text-foreground/5 blur-[8px] pointer-events-none select-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_0_30px_rgba(255,255,255,0.05)] dark:drop-shadow-none" style={{ lineHeight: 0.8 }}>
              LTP
@@ -58,7 +64,7 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 md:gap-6 relative z-10"
+            className="flex flex-col sm:flex-row gap-4 md:gap-6 relative z-10 pointer-events-auto"
           >
             <Link href="/select-service" className="group relative px-6 md:px-8 py-4 bg-accent text-white font-bold text-lg rounded-lg overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,0,170,0.5)] w-full sm:w-auto text-center flex justify-center">
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
@@ -74,17 +80,6 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
             </Link>
           </motion.div>
         </div>
-
-        {/* Decorative Grid Floor */}
-        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:linear-gradient(to_top,black,transparent)] pointer-events-none" style={{ perspective: "1000px", transform: "rotateX(60deg) scale(2.5)", transformOrigin: "bottom" }} />
-      </section>
-
-      {/* Interactive Trajectory Simulator */}
-      <section className="w-full max-w-7xl mx-auto py-12 px-4 md:px-8 relative z-20">
-        <h2 className="text-3xl md:text-4xl font-black font-orbitron text-foreground decoration-primary drop-shadow-[0_0_15px_rgba(0,245,255,0.5)] dark:drop-shadow-none mb-6 text-center">
-          MISSION SIMULATION
-        </h2>
-        <InteractiveTrajectory />
       </section>
 
       {/* Top Companions Section */}

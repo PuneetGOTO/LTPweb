@@ -119,17 +119,11 @@ export default function InteractiveTrajectory() {
   else if (progress >= 0.95) phase = "RE-ENTRY"
 
   return (
-    <div className="relative w-full h-[600px] bg-black rounded-2xl overflow-hidden border border-border shadow-[0_0_50px_rgba(0,245,255,0.1)] group">
+    <div className="absolute inset-0 w-full h-full group">
       
       <Canvas camera={{ position: [0, 3, 8], fov: 50 }}>
         <Scene progress={progress} />
       </Canvas>
-
-      {/* UI Overlay */}
-      <div className="absolute top-6 left-6 pointer-events-none">
-        <h3 className="text-2xl font-black font-orbitron text-primary drop-shadow-[0_0_10px_rgba(0,245,255,0.8)] tracking-widest">ARTEMIS II</h3>
-        <p className="text-white/70 text-sm font-bold tracking-wider mt-1">INTERACTIVE ORBITAL SIMULATION</p>
-      </div>
 
       {/* Telemetry Display */}
       <div className="absolute top-6 right-6 text-right pointer-events-none font-orbitron text-xs flex flex-col gap-1">
@@ -139,16 +133,16 @@ export default function InteractiveTrajectory() {
       </div>
 
       {/* Interactive Controls Panel */}
-      <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 to-transparent flex items-center gap-4">
+      <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-black/90 to-transparent flex items-center gap-4">
         <button 
           onClick={() => setIsPlaying(!isPlaying)}
           className="text-white hover:text-primary transition-colors"
         >
-          {isPlaying ? <PauseCircle className="w-10 h-10" /> : <PlayCircle className="w-10 h-10" />}
+          {isPlaying ? <PauseCircle className="w-8 h-8 md:w-10 md:h-10" /> : <PlayCircle className="w-8 h-8 md:w-10 md:h-10" />}
         </button>
         
         <div className="flex-1 flex flex-col gap-2">
-          <div className="flex justify-between text-[10px] text-white/50 font-bold tracking-widest font-orbitron">
+          <div className="hidden md:flex justify-between text-[10px] text-white/50 font-bold tracking-widest font-orbitron">
             <span>EARTH</span>
             <span className="text-accent">MOON</span>
             <span>EARTH</span>
@@ -166,13 +160,6 @@ export default function InteractiveTrajectory() {
             className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-primary hover:accent-accent transition-colors"
           />
         </div>
-      </div>
-
-      {/* Instruction hint */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-        <span className="bg-black/50 backdrop-blur-md text-white/50 px-4 py-2 rounded-full text-xs font-bold tracking-widest border border-white/10">
-          DRAG TO ROTATE SCENE
-        </span>
       </div>
     </div>
   )
