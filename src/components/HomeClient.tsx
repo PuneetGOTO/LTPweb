@@ -5,6 +5,7 @@ import { PlayCircle, Flame, Users, Star } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
 import { Navbar } from "@/components/Navbar"
+import InteractiveTrajectory from "@/components/InteractiveTrajectory"
 
 export default function HomeClient({ topCompanions }: { topCompanions: any[] }) {
   const { t } = useLanguage()
@@ -76,6 +77,14 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
 
         {/* Decorative Grid Floor */}
         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:linear-gradient(to_top,black,transparent)] pointer-events-none" style={{ perspective: "1000px", transform: "rotateX(60deg) scale(2.5)", transformOrigin: "bottom" }} />
+      </section>
+
+      {/* Interactive Trajectory Simulator */}
+      <section className="w-full max-w-7xl mx-auto py-12 px-4 md:px-8 relative z-20">
+        <h2 className="text-3xl md:text-4xl font-black font-orbitron text-foreground decoration-primary drop-shadow-[0_0_15px_rgba(0,245,255,0.5)] dark:drop-shadow-none mb-6 text-center">
+          MISSION SIMULATION
+        </h2>
+        <InteractiveTrajectory />
       </section>
 
       {/* Top Companions Section */}
