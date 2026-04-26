@@ -81,17 +81,17 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
       <div className="max-w-6xl mx-auto p-4 md:p-8">
         
         {/* Profile Header */}
-        <div className="flex items-center gap-6 mb-8 border-b border-white/10 pb-6">
+        <div className="flex items-center gap-6 mb-8 border-b border-border pb-6">
           {/* Avatar */}
           <div className="relative group">
             <button 
               onClick={handleAvatarClick}
-              className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary/50 shadow-[0_0_20px_rgba(0,245,255,0.3)] bg-white/5 flex items-center justify-center cursor-pointer group-hover:border-primary transition-all"
+              className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-primary/50 shadow-[0_0_20px_rgba(0,245,255,0.3)] bg-secondary flex items-center justify-center cursor-pointer group-hover:border-primary transition-all"
             >
               {previewUrl ? (
                 <img src={previewUrl} alt="avatar" className="w-full h-full object-cover" />
               ) : (
-                <UserIcon className="w-10 h-10 text-white/30" />
+                <UserIcon className="w-10 h-10 text-muted-foreground" />
               )}
               
               {/* Hover overlay */}
@@ -114,25 +114,25 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
           
           <div className="flex-1">
             <h1 className="text-3xl md:text-4xl font-bold font-orbitron text-primary">{t('dash.title')}</h1>
-            <p className="text-muted-foreground mt-1 font-bold">{t('dash.welcome')}, <span className="text-white">{username}</span></p>
+            <p className="text-muted-foreground mt-1 font-bold">{t('dash.welcome')}, <span className="text-foreground">{username}</span></p>
             {error && <p className="text-destructive text-sm mt-1 font-bold">{error}</p>}
           </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {/* My Bookings */}
-           <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+           <div className="bg-secondary border border-border rounded-xl p-6 backdrop-blur-sm shadow-[0_0_30px_rgba(0,0,0,0.5)] dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]">
              <h2 className="text-2xl font-bold font-orbitron mb-6 text-accent">{t('dash.bookings')}</h2>
              {clientOrders.length === 0 ? (
                <p className="text-muted-foreground">{t('dash.empty.b')}</p>
              ) : (
                <div className="space-y-4">
                  {clientOrders.map(order => (
-                   <div key={order.id} className={`bg-black/40 border border-white/5 p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-accent/30 transition-colors ${order.status === 'CANCELLED' ? 'opacity-50' : ''}`}>
+                   <div key={order.id} className={`bg-background/40 border border-border p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-accent/30 transition-colors ${order.status === 'CANCELLED' ? 'opacity-50' : ''}`}>
                      <div className={`absolute left-0 top-0 w-1 h-full ${order.status === 'CANCELLED' ? 'bg-red-500' : 'bg-accent'}`}></div>
                      <div className="flex justify-between items-center w-full">
                        <div>
-                         <p className="font-bold text-lg mb-1 text-white">{order.companion?.profile?.displayName || order.companion?.username || "LTP Platform Service"}</p>
+                         <p className="font-bold text-lg mb-1 text-foreground">{order.companion?.profile?.displayName || order.companion?.username || "LTP Platform Service"}</p>
                          <p className="text-xs text-muted-foreground">{order.gameName} • {order.durationHours} hr(s)</p>
                        </div>
                        <div className="text-right">
@@ -174,7 +174,7 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
            </div>
 
            {/* Companion Requests */}
-           <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+           <div className="bg-secondary border border-border rounded-xl p-6 backdrop-blur-sm shadow-[0_0_30px_rgba(0,0,0,0.5)] dark:shadow-[0_0_30px_rgba(0,0,0,0.5)]">
              <h2 className="text-2xl font-bold font-orbitron mb-6 text-primary flex items-center gap-2">
                {t('dash.requests')}
                {companionOrders.length > 0 && <span className="text-[10px] bg-primary text-black px-2 py-0.5 rounded-full">{companionOrders.length}</span>}
@@ -184,16 +184,16 @@ export default function DashboardClient({ clientOrders, companionOrders, usernam
              ) : (
                <div className="space-y-4">
                  {companionOrders.map(order => (
-                   <div key={order.id} className="bg-black/40 border border-white/5 p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-primary/30 transition-colors">
+                   <div key={order.id} className="bg-background/40 border border-border p-4 rounded-lg flex flex-col relative overflow-hidden group hover:border-primary/30 transition-colors">
                      <div className="absolute left-0 top-0 w-1 h-full bg-primary"></div>
                      <div className="flex justify-between items-center w-full">
                        <div>
-                         <p className="font-bold text-lg mb-1 text-white">{order.client.profile?.displayName || order.client.username}</p>
+                         <p className="font-bold text-lg mb-1 text-foreground">{order.client.profile?.displayName || order.client.username}</p>
                          <p className="text-xs text-muted-foreground">{order.gameName} • {order.durationHours} hr(s)</p>
                        </div>
                        <div className="text-right">
                          <p className="font-bold text-accent">${order.totalPrice}</p>
-                         <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold text-white/70 ${order.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-400'}`}>
+                         <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold text-foreground/70 ${order.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-500' : 'bg-green-500/20 text-green-400'}`}>
                            {order.status === 'PENDING' ? t('order.status.pending') : t('order.status.accepted')}
                          </span>
                        </div>

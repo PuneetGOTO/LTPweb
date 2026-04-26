@@ -27,38 +27,38 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
         <div className="flex gap-4 mb-8 justify-center md:justify-start border-b border-white/10 pb-4">
           <button 
             onClick={() => setActiveTab("PC")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "PC" ? "border-accent text-accent bg-accent/10" : "border-transparent text-muted-foreground hover:text-white hover:bg-white/5"}`}
+            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "PC" ? "border-accent text-accent bg-accent/10" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
           >
             <Monitor className="w-5 h-5" /> PC Gaming (端游)
           </button>
           <button 
             onClick={() => setActiveTab("MOBILE")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "MOBILE" ? "border-primary text-primary bg-primary/10" : "border-transparent text-muted-foreground hover:text-white hover:bg-white/5"}`}
+            className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all border-b-2 ${activeTab === "MOBILE" ? "border-primary text-primary bg-primary/10" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
           >
             <Smartphone className="w-5 h-5" /> Mobile Gaming (手游)
           </button>
         </div>
 
         {filteredCompanions.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-24 bg-white/5 rounded-2xl border border-white/10">
+          <div className="flex flex-col items-center justify-center p-24 bg-secondary rounded-2xl border border-border">
             <p className="text-xl text-muted-foreground font-semibold">{t('home.empty')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
             {filteredCompanions.map(companion => (
-              <Link href={`/companion/${companion.id}`} key={companion.id} className="group relative flex flex-col bg-black/40 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden hover:border-accent/50 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(255,0,170,0.15)]">
-                <div className="aspect-square bg-white/5 relative overflow-hidden">
+              <Link href={`/companion/${companion.id}`} key={companion.id} className="group relative flex flex-col bg-background/40 backdrop-blur-md border border-border rounded-xl overflow-hidden hover:border-accent/50 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(255,0,170,0.15)]">
+                <div className="aspect-square bg-secondary relative overflow-hidden">
                   {companion.profile?.avatarUrl ? (
                      <img src={companion.profile.avatarUrl} alt={companion.profile?.displayName || companion.username} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
-                     <div className="w-full h-full flex flex-col items-center justify-center text-white/20 bg-gradient-to-br from-black to-slate-900 shadow-inner">
+                     <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground/20 bg-gradient-to-br from-background to-secondary shadow-inner">
                        <Users className="w-12 h-12 text-muted-foreground mb-2" />
                        <span className="font-orbitron tracking-widest text-lg font-bold">{companion.profile?.displayName || companion.username}</span>
                      </div>
                   )}
-                  <div className="absolute top-2 right-2 bg-black/80 backdrop-blur border border-white/10 rounded px-2 py-1 flex items-center gap-1 z-10">
+                  <div className="absolute top-2 right-2 bg-background/80 backdrop-blur border border-border rounded px-2 py-1 flex items-center gap-1 z-10">
                     <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                    <span className="text-xs font-bold text-white">{companion.profile?.rating?.toFixed(1) || "5.0"}</span>
+                    <span className="text-xs font-bold text-foreground">{companion.profile?.rating?.toFixed(1) || "5.0"}</span>
                   </div>
                   {companion.profile?.isOnline ? (
                     <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
@@ -75,14 +75,14 @@ export default function CompanionsClient({ companions }: { companions: any[] }) 
                     </div>
                   )}
                 </div>
-                <div className="p-5 flex flex-col h-full bg-gradient-to-t from-black via-black/80 to-transparent">
+                <div className="p-5 flex flex-col h-full bg-gradient-to-t from-background via-background/80 to-transparent">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-xl leading-tight truncate font-orbitron text-white">{companion.profile?.displayName || companion.username}</h3>
+                    <h3 className="font-bold text-xl leading-tight truncate font-orbitron text-foreground">{companion.profile?.displayName || companion.username}</h3>
                     <span className="font-bold text-primary shrink-0">${companion.profile?.hourlyRate || 150}</span>
                   </div>
                   <div className="flex gap-2 mb-4 flex-wrap">
                     {(companion.profile?.games || "Valorant").split(',').map((g: string) => (
-                      <span key={g} className="text-[10px] px-2 border border-white/10 rounded-sm text-muted-foreground uppercase">{g.trim()}</span>
+                      <span key={g} className="text-[10px] px-2 border border-border rounded-sm text-muted-foreground uppercase">{g.trim()}</span>
                     ))}
                   </div>
                   <div className="mt-auto w-full py-2 border border-accent/50 text-accent font-bold text-center rounded text-sm tracking-widest group-hover:bg-accent group-hover:text-black transition-colors block">

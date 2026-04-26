@@ -22,8 +22,8 @@ export default function FAQPage() {
          </h1>
          <div className="space-y-6">
            {faqs.map((f, i) => (
-             <div key={i} className="bg-black/60 backdrop-blur-lg border border-white/10 p-6 rounded-xl hover:border-primary/30 transition-colors">
-               <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-3 leading-tight">
+             <div key={i} className="bg-background/60 backdrop-blur-lg border border-border p-6 rounded-xl hover:border-primary/30 transition-colors">
+               <h3 className="text-lg font-bold text-foreground mb-3 flex items-center gap-3 leading-tight">
                  <span className="text-primary font-orbitron text-xs px-2 py-1 bg-primary/10 rounded shrink-0">Q</span>
                  {f.q}
                </h3>
