@@ -107,7 +107,7 @@ export default function HomeClient({ topCompanions }: { topCompanions: any[] }) 
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-2xl font-bold font-orbitron tracking-wider text-foreground mb-1 group-hover:text-accent transition-colors">{companion.username}</h3>
+                    <h3 className="text-2xl font-bold font-orbitron tracking-wider text-foreground mb-1 group-hover:text-accent transition-colors">{companion.profile?.displayName || companion.username}</h3>
                     <p className="text-sm text-primary mb-4 font-semibold">${companion.profile?.hourlyRate || 150} {t('companion.rate')}</p>
                     
                     <div className="flex gap-2 mb-4 flex-wrap">

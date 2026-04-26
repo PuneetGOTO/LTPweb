@@ -58,7 +58,7 @@ export default function CompanionClient({ companion }: { companion: any }) {
              <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl sticky top-24 shadow-[0_0_40px_rgba(255,0,170,0.15)]">
                <div className="aspect-square w-full relative">
                  {profile.avatarUrl ? (
-                   <img src={profile.avatarUrl} alt={companion.username} className="w-full h-full object-cover" />
+                   <img src={profile.avatarUrl} alt={profile.displayName || companion.username} className="w-full h-full object-cover" />
                  ) : (
                    <div className="w-full h-full bg-gradient-to-tr from-slate-900 to-black flex items-center justify-center shadow-inner">
                      <span className="font-orbitron tracking-widest font-bold text-white/20">LTP PLAYER</span>
@@ -75,7 +75,7 @@ export default function CompanionClient({ companion }: { companion: any }) {
                </div>
                
                <div className="p-6">
-                 <h1 className="text-3xl font-black font-orbitron text-white mb-2 truncate" title={companion.username}>{companion.username}</h1>
+                 <h1 className="text-3xl font-black font-orbitron text-white mb-2 truncate" title={profile.displayName || companion.username}>{profile.displayName || companion.username}</h1>
                  <p className="text-2xl font-bold text-accent mb-6">${profile.hourlyRate || 150} <span className="text-sm font-normal text-muted-foreground">{t('companion.rate')}</span></p>
                  
                  <div className="mb-6 flex flex-wrap gap-2">
